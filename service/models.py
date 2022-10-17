@@ -13,6 +13,9 @@ logger = logging.getLogger("flask.app")
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
+def init_db(app):
+    """Initialize the SQLAlchemy app"""
+    Product.init_db(app)
 
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """

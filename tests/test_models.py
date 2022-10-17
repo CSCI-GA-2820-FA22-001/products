@@ -1,8 +1,8 @@
 """
-Test cases for YourResourceModel Model
+Test cases for Product Model
 
 """
-from itertools import Product
+from itertools import product
 import os
 import logging
 import unittest
