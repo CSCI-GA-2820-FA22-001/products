@@ -16,6 +16,12 @@ from service.models import Product, DataValidationError, db, DatabaseConnectionE
 from service import app
 from tests.factories import ProductFactory
 
+
+DATABASE_URI = os.getenv(
+    "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
+)
+
+
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
