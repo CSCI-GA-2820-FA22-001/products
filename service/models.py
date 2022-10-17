@@ -18,7 +18,7 @@ class DataValidationError(Exception):
     pass
 
 
-class YourResourceModel(db.Model):
+class Product(db.Model):
     """
     Class that represents a YourResourceModel
     """
