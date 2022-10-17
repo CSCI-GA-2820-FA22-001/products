@@ -18,7 +18,7 @@ class DataValidationError(Exception):
     pass
 
 
-class YourResourceModel(db.Model):
+class Product(db.Model):
     """
     Class that represents a YourResourceModel
     """
@@ -28,6 +28,8 @@ class YourResourceModel(db.Model):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(63))
+    price = db.Column(db.Integer, nullable=False, default=60)
+    description = db.Column(db.String(256))
 
     def __repr__(self):
         return "<YourResourceModel %r id=[%s]>" % (self.name, self.id)
