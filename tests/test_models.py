@@ -2,34 +2,48 @@
 Test cases for YourResourceModel Model
 
 """
+from itertools import Product
 import os
 import logging
 import unittest
-from service.models import YourResourceModel, DataValidationError, db
-
+from sqlite3 import InternalError
+from unicodedata import category, name
+from unittest import TestCase
+from unittest.mock import MagicMock, patch
+from requests import HTTPError, ConnectionError
+from sqlalchemy import null
+from werkzeug.exceptions import NotFound
+from service.models import Product, DataValidationError, db, DatabaseConnectionError
+from service import app
+from tests.factories import ProductFactory
 ######################################################################
-#  <your resource name>   M O D E L   T E S T   C A S E S
+#  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
-class TestYourResourceModel(unittest.TestCase):
-    """ Test Cases for YourResourceModel Model """
+class TestProductModel(unittest.TestCase):
+    """ Test Cases for Product Model """
 
     @classmethod
     def setUpClass(cls):
         """ This runs once before the entire test suite """
-        pass
+        app.config["TESTING"] = True
+        app.config["DEBUG"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+        app.logger.setLevel(logging.CRITICAL)
+        Product.init_db(app)
 
     @classmethod
     def tearDownClass(cls):
         """ This runs once after the entire test suite """
-        pass
+        db.session.close()
 
     def setUp(self):
         """ This runs before each test """
-        pass
+        db.session.query(Product).delete() # clean up the last tests
+        db.session.commit()
 
     def tearDown(self):
         """ This runs after each test """
-        pass
+        db.session.remove()
 
     ######################################################################
     #  T E S T   C A S E S
