@@ -12,15 +12,17 @@ import json
 import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from service.common import status  # HTTP Status Codes
-from service.models import db, init_db, Product
 from service import app
+from service.models import db, init_db, Product
+from service.common import status  # HTTP Status Codes
 from tests.factories import ProductFactory
 
+# DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///../db/test.db')
 DATABASE_URI = os.getenv(
-"DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
+    "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
 BASE_URL = "/products"
+
 
 ######################################################################
 #  T E S T   C A S E S
@@ -30,9 +32,10 @@ class TestProductServer(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """ This runs once before the entire test suite """
+        """Run once before all tests"""
         app.config["TESTING"] = True
         app.config["DEBUG"] = False
+        # Set up the test database
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
         init_db(app)
@@ -43,7 +46,8 @@ class TestProductServer(TestCase):
         db.session.close()
 
     def setUp(self):
-        """ This runs before each test """
+        """Runs before each test"""
+        self.client = app.test_client()
         db.session.query(Product).delete()  # clean up the last tests
         db.session.commit()
 
@@ -55,7 +59,10 @@ class TestProductServer(TestCase):
     #  P L A C E   T E S T   C A S E S   H E R E
     ######################################################################
 
-    def test_index(self):
-        """ It should call the home page """
-        resp = self.app.get("/")
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    def test_health(self):
+        """It should be healthy"""
+        response = self.client.get("/healthcheck")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["message"], "Healthy")

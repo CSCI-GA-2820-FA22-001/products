@@ -6,16 +6,8 @@ from itertools import product
 import os
 import logging
 import unittest
-from sqlite3 import InternalError
-from unicodedata import category, name
-from unittest import TestCase
-from unittest.mock import MagicMock, patch
-from requests import HTTPError, ConnectionError
-from sqlalchemy import null
-from werkzeug.exceptions import NotFound
-from service.models import Product, DataValidationError, db, DatabaseConnectionError
-from service import app
-from tests.factories import ProductFactory
+from service.models import YourResourceModel, DataValidationError, db
+
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
@@ -37,9 +29,9 @@ class TestProductModel(unittest.TestCase):
         db.session.close()
 
     def setUp(self):
-        """ This runs before each test """
-        db.session.query(Product).delete() # clean up the last tests
-        db.session.commit()
+        """This runs before each test"""
+        db.drop_all()  # clean up the last tests
+        db.create_all()  # make our sqlalchemy tables
 
     def tearDown(self):
         """ This runs after each test """
