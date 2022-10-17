@@ -62,26 +62,41 @@ class Product(db.Model):
         db.session.commit()
 
     def serialize(self):
-        """ Serializes a Product into a dictionary """
-        return {"id": self.id, "name": self.name}
+        """Serializes a Product into a dictionary"""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "description": self.description
+        }
 
     def deserialize(self, data):
         """
         Deserializes a Product from a dictionary
 
         Args:
-            data (dict): A dictionary containing the resource data
+            data (dict): A dictionary containing the Product data
         """
         try:
             self.name = data["name"]
+            # self.category = data["category"]
+            self.description = data["description"]
+            # Check the validity of the price attribute
+            price = data.get("price", "")
+            if isinstance(price, int) or (price and price.isdigit()):
+                self.price = int(price)
+            else:
+                raise DataValidationError(
+                    "Invalid type for integer [price]: "
+                    + str(type(data["price"]))
+                )
+        # except AttributeError as error:
+        #     raise DataValidationError("Invalid attribute: " + error.args[0]) from error
         except KeyError as error:
-            raise DataValidationError(
-                "Invalid Product: missing " + error.args[0]
-            )
+            raise DataValidationError("Invalid product: missing " + error.args[0]) from error
         except TypeError as error:
             raise DataValidationError(
-                "Invalid Product: body of request contained bad or no data - "
-                "Error message: " + error
+                "Invalid product: body of request contained bad or no data" + str(error)
             )
         return self
 
@@ -102,10 +117,18 @@ class Product(db.Model):
         return cls.query.all()
 
     @classmethod
-    def find(cls, by_id):
-        """ Finds a Product by it's ID """
-        logger.info("Processing lookup for id %s ...", by_id)
-        return cls.query.get(by_id)
+    def find(cls, product_id: int):
+        """Finds a Product by it's ID
+
+        :param product_id: the id of the Product to find
+        :type product_id: int
+
+        :return: an instance with the product_id, or None if not found
+        :rtype: Product
+
+        """
+        logger.info("Processing lookup for id %s ...", product_id)
+        return cls.query.get(product_id)
 
     @classmethod
     def find_by_name(cls, name):
