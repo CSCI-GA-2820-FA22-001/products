@@ -12,11 +12,15 @@ import json
 import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from service.utils import status  # HTTP Status Codes
+from service.common import status  # HTTP Status Codes
 from service.models import db, init_db, Product
 from service import app
 from tests.factories import ProductFactory
 
+DATABASE_URI = os.getenv(
+"DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
+)
+BASE_URL = "/products"
 
 ######################################################################
 #  T E S T   C A S E S
@@ -40,14 +44,12 @@ class TestProductServer(TestCase):
 
     def setUp(self):
         """ This runs before each test """
-        db.drop_all()  # clean the past tests
-        db.create_all()  # create new tables
-        self.app = app.test_client()
+        db.session.query(Product).delete()  # clean up the last tests
+        db.session.commit()
 
     def tearDown(self):
         """ This runs after each test """
         db.session.remove()
-        db.drop_all()
 
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E

@@ -2,11 +2,10 @@
 Test cases for YourResourceModel Model
 
 """
-from itertools import product
+from itertools import Product
 import os
 import logging
 import unittest
-from service.models import YourResourceModel, DataValidationError, db
 from sqlite3 import InternalError
 from unicodedata import category, name
 from unittest import TestCase
@@ -18,7 +17,7 @@ from service.models import Product, DataValidationError, db, DatabaseConnectionE
 from service import app
 from tests.factories import ProductFactory
 ######################################################################
-#  <your resource name>   M O D E L   T E S T   C A S E S
+#  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
 class TestProductModel(unittest.TestCase):
     """ Test Cases for Product Model """
@@ -39,13 +38,12 @@ class TestProductModel(unittest.TestCase):
 
     def setUp(self):
         """ This runs before each test """
-        db.drop_all()  # clean up the last tests
-        db.create_all()  # make our sqlalchemy tables
+        db.session.query(Product).delete() # clean up the last tests
+        db.session.commit()
 
     def tearDown(self):
         """ This runs after each test """
         db.session.remove()
-        db.drop_all()
 
     ######################################################################
     #  T E S T   C A S E S
