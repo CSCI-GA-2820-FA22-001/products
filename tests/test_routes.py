@@ -5,38 +5,49 @@ Test cases can be run with the following:
   nosetests -v --with-spec --spec-color
   coverage report -m
 """
+from crypt import methods
 import os
 import logging
+import json
+import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
+from service.utils import status  # HTTP Status Codes
+from service.models import db, init_db, Product
 from service import app
-from service.models import db
-from service.common import status  # HTTP Status Codes
+from tests.factories import ProductFactory
 
 
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestYourResourceServer(TestCase):
+class TestProductServer(TestCase):
     """ REST API Server Tests """
 
     @classmethod
     def setUpClass(cls):
         """ This runs once before the entire test suite """
-        pass
+        app.config["TESTING"] = True
+        app.config["DEBUG"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+        app.logger.setLevel(logging.CRITICAL)
+        init_db(app)
 
     @classmethod
     def tearDownClass(cls):
         """ This runs once after the entire test suite """
-        pass
+        db.session.close()
 
     def setUp(self):
         """ This runs before each test """
+        db.drop_all()  # clean the past tests
+        db.create_all()  # create new tables
         self.app = app.test_client()
 
     def tearDown(self):
         """ This runs after each test """
-        pass
+        db.session.remove()
+        db.drop_all()
 
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E

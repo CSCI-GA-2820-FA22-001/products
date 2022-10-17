@@ -1,12 +1,17 @@
 """
-My Service
+Product Service
 
-Describe what your service does here
+Paths -- RESTful
 """
-
-from flask import Flask, jsonify, request, url_for, make_response, abort
+import sys
+import secrets
+import logging
+from functools import wraps
+from flask import Flask, jsonify, request, url_for, make_response, render_template, abort
+from flask_restx import Api, Resource, fields, reqparse, inputs
+from service.models import Product, DataValidationError, DatabaseConnectionError
 from .common import status  # HTTP Status Codes
-from service.models import YourResourceModel
+
 
 # Import Flask application
 from . import app
