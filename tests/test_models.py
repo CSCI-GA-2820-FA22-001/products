@@ -1,12 +1,20 @@
 """
 Test cases for Product Model
-
 """
 from itertools import product
 import os
 import logging
 import unittest
-from service.models import YourResourceModel, DataValidationError, db
+from sqlite3 import InternalError
+from unicodedata import category, name
+from unittest import TestCase
+from unittest.mock import MagicMock, patch
+from requests import HTTPError, ConnectionError
+from sqlalchemy import null
+from werkzeug.exceptions import NotFound
+from service.models import Product, DataValidationError, db, DatabaseConnectionError
+from service import app
+from tests.factories import ProductFactory
 
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S

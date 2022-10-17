@@ -17,7 +17,6 @@ from service.models import db, init_db, Product
 from service.common import status  # HTTP Status Codes
 from tests.factories import ProductFactory
 
-# DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///../db/test.db')
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
@@ -58,6 +57,13 @@ class TestProductServer(TestCase):
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E
     ######################################################################
+
+
+    def test_index(self):
+        """ It should call the home page """
+        resp = self.app.get("/")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
 
     def test_health(self):
         """It should be healthy"""
