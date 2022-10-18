@@ -26,10 +26,6 @@ class DataValidationError(Exception):
 
     pass
 
-class DatabaseConnectionError(Exception):
-    """Custom Exception when database connection fails"""
-    pass
-
 class Product(db.Model):
     """
     Class that represents a Product
