@@ -108,11 +108,7 @@ def update_products(product_id):
 
 
 ######################################################################
-<<<<<<< HEAD
-# RETRIEVE A PET
-=======
 # RETRIEVE A PPRODUCT
->>>>>>> master
 ######################################################################
 @app.route("/products/<int:product_id>", methods=["GET"])
 def get_products(product_id):
@@ -129,25 +125,15 @@ def get_products(product_id):
     app.logger.info("Returning product: %s", product.name)
     return jsonify(product.serialize()), status.HTTP_200_OK
 
-<<<<<<< HEAD
-
-
 ######################################################################
-=======
- ######################################################################
->>>>>>> master
 # ADD A NEW PRODUCT
 ######################################################################
+
 @app.route("/products", methods=["POST"])
 def create_products():
     """
-<<<<<<< HEAD
     Creates a Product
     This endpoint will create a Product based the data in the body that is posted
-=======
-    Creates a Products
-    This endpoint will create a Products based the data in the body that is posted
->>>>>>> master
     """
     app.logger.info("Request to create a product")
     check_content_type("application/json")
@@ -155,18 +141,12 @@ def create_products():
     product.deserialize(request.get_json())
     product.create()
     message = product.serialize()
-<<<<<<< HEAD
     location_url = url_for("get_products", product_id=product.id, _external=True)
-=======
-    location_url = url_for("get_products", product_id =product.id, _external=True)
->>>>>>> master
-
     app.logger.info("Product with ID [%s] created.", product.id)
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 
 ######################################################################
-<<<<<<< HEAD
 # UPDATE AN EXISTING PRODUCT
 ######################################################################
 @app.route("/products/<int:product_id>", methods=["PUT"])
@@ -192,8 +172,6 @@ def update_products(product_id):
 
 
 ######################################################################
-=======
->>>>>>> master
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
 
