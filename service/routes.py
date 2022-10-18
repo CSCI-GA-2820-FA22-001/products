@@ -70,3 +70,20 @@ def check_content_type(content_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {content_type}",
     )
+
+def list_products():
+    """Returns all of the Products"""
+    app.logger.info("Request for Product list")
+    products = []
+    category = request.args.get("category")
+    name = request.args.get("name")
+    if category:
+        products = Product.find_by_category(category)
+    elif name:
+        products = Product.find_by_name(name)
+    else:
+        products = Product.all()
+
+    results = [product.serialize() for product in products]
+    app.logger.info("Returning %d products", len(results))
+    return jsonify(results), status.HTTP_200_OK
