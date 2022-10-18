@@ -116,6 +116,7 @@ class TestProductModel(unittest.TestCase):
     def test_find_or_404_not_found(self):
         """It should return 404 not found"""
         self.assertRaises(NotFound, Product.find_or_404, 0)
+    
     def test_create_a_product(self):
         """ It should Create a product and assert that it exists """
         product = Product(name = 'iphone', price = 50, description = 'this is iphone')
