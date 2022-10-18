@@ -63,8 +63,8 @@ class TestProductServer(TestCase):
             self.assertEqual(
                 response.status_code, status.HTTP_201_CREATED, "Could not create test products"
             )
-            new_pet = response.get_json()
-            test_product.id = new_pet["id"]
+            new_product = response.get_json()
+            test_product.id = new_product["id"]
             products.append(test_product)
         return products
     ######################################################################
