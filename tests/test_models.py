@@ -62,7 +62,7 @@ class TestProductModel(unittest.TestCase):
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
         self.assertEqual(product.name, 'iphone')
-        self.assertEqual(product.price,'50')
+        self.assertEqual(product.price,50)
         self.assertEqual(product.description, "this is iphone")
-        
+
 

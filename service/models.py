@@ -31,7 +31,7 @@ class Product(db.Model):
     Class that represents a Product
     """
 
-    # app = None
+    app = None
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
