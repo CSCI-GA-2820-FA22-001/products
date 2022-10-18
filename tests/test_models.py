@@ -16,6 +16,11 @@ from service.models import Product, DataValidationError, db, DatabaseConnectionE
 from service import app
 from tests.factories import ProductFactory
 
+
+DATABASE_URI = os.getenv(
+    "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
+)
+
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
@@ -49,6 +54,23 @@ class TestProductModel(unittest.TestCase):
     #  T E S T   C A S E S
     ######################################################################
 
-    def test_XXXX(self):
-        """ It should always be true """
-        self.assertTrue(True)
+
+    def test_update_a_product(self):
+        """Update a Product"""
+        product = ProductFactory()
+        logging.debug(product)
+        product.create()
+        logging.debug(product)
+        self.assertIsNotNone(product.id)
+        # Change it an save it
+        product.price = 100
+        original_id = product.id
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.price, 100)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, 1)
+        self.assertEqual(products[0].price, 100)
