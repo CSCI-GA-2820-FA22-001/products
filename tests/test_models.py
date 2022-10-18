@@ -4,6 +4,7 @@ Test cases for Product Model
 from itertools import product
 import os
 import logging
+from pydoc import describe
 import unittest
 from sqlite3 import InternalError
 from unicodedata import category, name
@@ -115,3 +116,13 @@ class TestProductModel(unittest.TestCase):
     def test_find_or_404_not_found(self):
         """It should return 404 not found"""
         self.assertRaises(NotFound, Product.find_or_404, 0)
+    def test_create_a_product(self):
+        """ It should Create a product and assert that it exists """
+        product = Product(name = 'iphone', price = 50, description = 'this is iphone')
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.name, 'iphone')
+        self.assertEqual(product.price,50)
+        self.assertEqual(product.description, "this is iphone")
+
+
