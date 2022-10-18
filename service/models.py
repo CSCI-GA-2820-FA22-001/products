@@ -138,11 +138,30 @@ class Product(db.Model):
         return cls.query.get(product_id)
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_or_404(cls, product_id: int):
+        """Find a Product by it's id
+
+        :param product_id: the id of the Product to find
+        :type product_id: int
+
+        :return: an instance with the product_id, or 404_NOT_FOUND if not found
+        :rtype: Product
+
+        """
+        logger.info("Processing lookup or 404 for id %s", product_id)
+        return cls.query.get_or_404(product_id)
+
+    @classmethod
+    def find_by_name(cls, name: str) -> list:
         """Returns all Products with the given name
 
-        Args:
-            name (string): the name of the Products you want to match
+        :param name: the name of the Products you want to match
+        :type name: str
+
+        :return: a collection of Products with that name
+        :rtype: list
+
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
+
