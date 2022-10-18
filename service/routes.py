@@ -48,9 +48,9 @@ def index():
 @app.route("/products/<int:product_id>", methods=["GET"])
 def get_products(product_id):
     """
-    Retrieve a single Pet
+    Retrieve a single Product
 
-    This endpoint will return a Pet based on it's id
+    This endpoint will return a Product based on it's id
     """
     app.logger.info("Request for product with id: %s", product_id)
     product = Product.find(product_id)

@@ -86,7 +86,7 @@ class TestProductServer(TestCase):
         self.assertEqual(data["status"], 200)
         self.assertEqual(data["message"], "Healthy")
     
-    def test_create_pet(self):
+    def test_create_product(self):
         """It should Create a new Product"""
         test_product = ProductFactory()
         logging.debug("Test Product: %s", test_product.serialize())
