@@ -98,18 +98,18 @@ class TestProductServer(TestCase):
         self.assertIsNotNone(location)
 
         # Check the data is correct
-        new_pet = response.get_json()
-        self.assertEqual(new_pet["name"], test_product.name)
-        self.assertEqual(new_pet["price"], test_product.price)
-        self.assertEqual(new_pet["description"], test_product.description)
+        new_product = response.get_json()
+        self.assertEqual(new_product["name"], test_product.name)
+        self.assertEqual(new_product["price"], test_product.price)
+        self.assertEqual(new_product["description"], test_product.description)
 
         # Check that the location header was correct
         response = self.client.get(location)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        new_pet = response.get_json()
-        self.assertEqual(new_pet["name"], test_product.name)
-        self.assertEqual(new_pet["price"], test_product.price)
-        self.assertEqual(new_pet["description"], test_product.description)
+        new_product = response.get_json()
+        self.assertEqual(new_product["name"], test_product.name)
+        self.assertEqual(new_product["price"], test_product.price)
+        self.assertEqual(new_product["description"], test_product.description)
 
     
     
