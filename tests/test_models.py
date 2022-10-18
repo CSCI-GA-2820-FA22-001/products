@@ -4,6 +4,7 @@ Test cases for Product Model
 from itertools import product
 import os
 import logging
+from pydoc import describe
 import unittest
 from sqlite3 import InternalError
 from unicodedata import category, name
@@ -20,6 +21,7 @@ from tests.factories import ProductFactory
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
+
 
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
@@ -53,6 +55,16 @@ class TestProductModel(unittest.TestCase):
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
+
+    def test_create_a_product(self):
+        """ It should Create a product and assert that it exists """
+        product = Product(name = 'iphone', price = 50, description = 'this is iphone')
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.name, 'iphone')
+        self.assertEqual(product.price,50)
+        self.assertEqual(product.description, "this is iphone")
+
 
 
     def test_update_a_product(self):
