@@ -110,7 +110,7 @@ def create_products():
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 ######################################################################
-# ADD A NEW PRODUCT
+# DELETE A PRODUCT
 ######################################################################
 @app.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_products(product_id):
