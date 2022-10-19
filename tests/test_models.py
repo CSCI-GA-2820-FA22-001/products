@@ -127,7 +127,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.description, "this is iphone")
         
     def test_update_a_product(self):
-        """Update a Product"""
+        """It should Update an existing Product"""
         product = ProductFactory()
         logging.debug(product)
         product.create()
