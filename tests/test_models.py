@@ -127,3 +127,11 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.description, "this is iphone")
 
 
+    def test_delete_a_product(self):
+        """ It should Delete a product """
+        product = ProductFactory()
+        product.create()
+        self.assertEqual(len(Product.all()), 1)
+        product.delete()
+        self.assertEqual(len(Product.all()), 0)
+
