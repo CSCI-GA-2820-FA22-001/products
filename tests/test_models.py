@@ -58,6 +58,16 @@ class TestProductModel(unittest.TestCase):
 
     def test_read_a_product(self):
         """ It should always be true """
+        product = ProductFactory()
+        logging.debug(product)
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+        # Fetch it back
+        found_product = Product.find(product.id)
+        self.assertEqual(found_product.id, product.id)
+        self.assertEqual(found_product.name, product.name)
+        self.assertEqual(found_product.price, product.price)
         self.assertTrue(True)
 
     def test_get_all_products(self):
