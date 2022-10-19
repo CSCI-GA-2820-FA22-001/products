@@ -125,5 +125,23 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.name, 'iphone')
         self.assertEqual(product.price,50)
         self.assertEqual(product.description, "this is iphone")
-
-
+        
+    def test_update_a_product(self):
+        """It should Update an existing Product"""
+        product = ProductFactory()
+        logging.debug(product)
+        product.create()
+        logging.debug(product)
+        self.assertIsNotNone(product.id)
+        # Change it an save it
+        product.price = 100
+        original_id = product.id
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.price, 100)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, 1)
+        self.assertEqual(products[0].price, 100)
