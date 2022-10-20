@@ -57,7 +57,7 @@ class TestProductModel(unittest.TestCase):
     ######################################################################
 
     def test_read_a_product(self):
-        """ It should always be true """
+        """ It should Read a Product """
         product = ProductFactory()
         logging.debug(product)
         product.id = None
