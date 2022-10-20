@@ -131,12 +131,29 @@ class TestProductModel(unittest.TestCase):
     
     def test_create_a_product(self):
         """ It should Create a product and assert that it exists """
-        product = Product(name = 'iphone', price = 50, description = 'this is iphone')
+        product = Product(name = "iphone", price = 50, description = 'this is iphone')
+        self.assertEqual(str(product), "<Product 'iphone' id=[None]>")
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
         self.assertEqual(product.name, 'iphone')
         self.assertEqual(product.price,50)
         self.assertEqual(product.description, "this is iphone")
+        product = Product(name = "iphone", price = 60, description = 'this is two iphone')
+        self.assertEqual(product.price,60)
+        self.assertEqual(product.description, "this is two iphone")
+    
+    def test_add_a_product(self):
+        """It should Create a product and add it to the database"""
+        products = Product.all()
+        self.assertEqual(products, [])
+        product = Product(name = "iphone", price = 50, description = 'this is iphone')
+        self.assertTrue(product is not None)
+        self.assertEqual(product.id, None)
+        product.create()
+        # Assert that it was assigned an id and shows up in the database
+        self.assertIsNotNone(product.id)
+        products = Product.all()
+        self.assertEqual(len(products), 1)
         
     def test_update_a_product(self):
         """It should Update an existing Product"""
