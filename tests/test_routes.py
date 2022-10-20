@@ -12,6 +12,8 @@ import json
 import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
+
+from flask import url_for
 from service import app
 from service.models import db, init_db, Product
 from service.common import status  # HTTP Status Codes
@@ -78,6 +80,8 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data["name"], "Product REST API Service")
+        self.assertEqual(data["version"], "1.0")
+        self.assertEqual(data["paths"],"http://localhost/products")
         
 
     def test_health(self):
