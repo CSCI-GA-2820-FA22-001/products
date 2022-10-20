@@ -68,6 +68,10 @@ def check_content_type(content_type):
         f"Content-Type must be {content_type}",
     )
 
+######################################################################
+# LIST ALL PRODUCTS
+######################################################################
+
 def list_products():
     """Returns all of the Products"""
     app.logger.info("Request for Product list")
