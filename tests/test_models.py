@@ -68,7 +68,19 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_product.id, product.id)
         self.assertEqual(found_product.name, product.name)
         self.assertEqual(found_product.price, product.price)
+        self.assertTrue(True)
 
+    def test_get_all_products(self):
+        """It should Get a list of all the Products"""
+        products = Product.all()
+        self.assertEqual(products, [])
+        # Create 5 Products
+        for _ in range(5):
+            pet = ProductFactory()
+            pet.create()
+        # See if we get back 5 pets
+        products = Product.all()
+        self.assertEqual(len(products), 5)
 
     def test_find_product(self):
         """ It should always be true """
