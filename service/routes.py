@@ -71,7 +71,7 @@ def check_content_type(content_type):
 ######################################################################
 # LIST ALL PRODUCTS
 ######################################################################
-
+@app.route("/products", methods=["GET"])
 def list_products():
     """Returns all of the Products"""
     app.logger.info("Request for Product list")
