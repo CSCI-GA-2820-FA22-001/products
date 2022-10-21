@@ -83,7 +83,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(products), 5)
 
     def test_find_product(self):
-        """ It should always be true """
+        """ It should Find a product by ID """
         products = ProductFactory.create_batch(3)
         for product in products:
             product.create()
