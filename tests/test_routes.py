@@ -181,7 +181,25 @@ class TestProductServer(TestCase):
         test_product.price = -5
         response = self.client.post(BASE_URL, json = test_product.serialize())
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_create_product_price_type_string(self):
+        """ It should identify the price is invalid if price is not digit """
+        test_product = ProductFactory()
+        logging.debug(test_product)
 
+        test_product.price = "s"
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_product_price_type_digit(self):
+        """ It should identify the price is invalid if price is not digit """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.price = "5"
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
     def test_create_product_exceed_maxlength_name(self):
         """ It should identify the invalid name if name is not capitalized or exceed 20 characters"""
         test_product = ProductFactory()
@@ -201,4 +219,4 @@ class TestProductServer(TestCase):
         response = self.client.post(BASE_URL)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-    
+   

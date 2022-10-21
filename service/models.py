@@ -173,17 +173,3 @@ class Product(db.Model):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
-
-    @classmethod
-    def find_by_id(cls, id: str) -> list:
-        """Returns all Products with the given name
-
-        :param name: the name of the Products you want to match
-        :type name: str
-
-        :return: a collection of Products with that name
-        :rtype: list
-
-        """
-        logger.info("Processing id query for %s ...", id)
-        return cls.query.filter(cls.id == id)
