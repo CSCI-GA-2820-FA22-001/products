@@ -48,8 +48,10 @@ class Product(db.Model):
         """
         logger.info("Creating %s", self.name)
         self.id = None  # id must be none to generate next primary key
-        db.session.add(self)
-        db.session.commit()
+        if self.product_validation():
+            db.session.add(self)
+            db.session.commit()
+        
 
     def update(self):
         """
@@ -161,3 +163,18 @@ class Product(db.Model):
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
 
+    def product_validation(self):
+        """ Check if the production information is valid """
+        if len(self.name) > 20:
+            return False
+        if self.name[0].islower():
+            return False
+        if not isinstance(self.price, int):
+            return False
+        if self.price < 0:
+            return False
+        if not self.description:
+            return False
+
+        return True
+        
