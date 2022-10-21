@@ -57,7 +57,7 @@ class TestProductModel(unittest.TestCase):
     ######################################################################
 
     def test_read_a_product(self):
-        """ It should always be true """
+        """ It should Read a Product """
         product = ProductFactory()
         logging.debug(product)
         product.id = None
@@ -68,10 +68,22 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_product.id, product.id)
         self.assertEqual(found_product.name, product.name)
         self.assertEqual(found_product.price, product.price)
+        self.assertTrue(True)
 
+    def test_get_all_products(self):
+        """It should Get a list of all the Products"""
+        products = Product.all()
+        self.assertEqual(products, [])
+        # Create 5 Products
+        for _ in range(5):
+            pet = ProductFactory()
+            pet.create()
+        # See if we get back 5 products
+        products = Product.all()
+        self.assertEqual(len(products), 5)
 
     def test_find_product(self):
-        """ It should always be true """
+        """ It should Find a product by ID """
         products = ProductFactory.create_batch(3)
         for product in products:
             product.create()
@@ -119,13 +131,49 @@ class TestProductModel(unittest.TestCase):
     
     def test_create_a_product(self):
         """ It should Create a product and assert that it exists """
-        product = Product(name = 'iphone', price = 50, description = 'this is iphone')
+        product = Product(name = "iphone", price = 50, description = 'this is iphone')
+        self.assertEqual(str(product), "<Product 'iphone' id=[None]>")
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
         self.assertEqual(product.name, 'iphone')
         self.assertEqual(product.price,50)
         self.assertEqual(product.description, "this is iphone")
-
+        product = Product(name = "iphone", price = 60, description = 'this is two iphone')
+        self.assertEqual(product.price,60)
+        self.assertEqual(product.description, "this is two iphone")
+    
+    def test_add_a_product(self):
+        """It should Create a product and add it to the database"""
+        products = Product.all()
+        self.assertEqual(products, [])
+        product = Product(name = "iphone", price = 50, description = 'this is iphone')
+        self.assertTrue(product is not None)
+        self.assertEqual(product.id, None)
+        product.create()
+        # Assert that it was assigned an id and shows up in the database
+        self.assertIsNotNone(product.id)
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        
+    def test_update_a_product(self):
+        """It should Update an existing Product"""
+        product = ProductFactory()
+        logging.debug(product)
+        product.create()
+        logging.debug(product)
+        self.assertIsNotNone(product.id)
+        # Change it an save it
+        product.price = 100
+        original_id = product.id
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.price, 100)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, 1)
+        self.assertEqual(products[0].price, 100)
 
     def test_delete_a_product(self):
         """ It should Delete a product """
@@ -134,4 +182,3 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(Product.all()), 1)
         product.delete()
         self.assertEqual(len(Product.all()), 0)
-

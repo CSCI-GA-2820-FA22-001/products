@@ -12,6 +12,8 @@ import json
 import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
+
+from flask import url_for
 from service import app
 from service.models import db, init_db, Product
 from service.common import status  # HTTP Status Codes
@@ -74,8 +76,12 @@ class TestProductServer(TestCase):
 
     def test_index(self):
         """ It should call the home page """
-        response = self.app.get("/")
+        response = self.client.get("/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["name"], "Product REST API Service")
+        self.assertEqual(data["version"], "1.0")
+        self.assertEqual(data["paths"],"http://localhost/products")
         
 
     def test_health(self):
@@ -103,6 +109,14 @@ class TestProductServer(TestCase):
         data = response.get_json()
         logging.debug("Response data = %s", data)
         self.assertIn("was not found", data["message"])
+
+    def test_get_product_list(self):
+        """It should Get a list of Products"""
+        self._create_products(5)
+        response = self.client.get(BASE_URL)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
     
     def test_create_product(self):
         """It should Create a new Product"""
@@ -129,6 +143,7 @@ class TestProductServer(TestCase):
         self.assertEqual(new_product["price"], test_product.price)
         self.assertEqual(new_product["description"], test_product.description)
 
+
     def test_delete_product(self):
         """ It should Delete a Product """
         test_product = self._create_products(1)[0]
@@ -137,3 +152,24 @@ class TestProductServer(TestCase):
         self.assertEqual(len(response.data), 0)
         response = self.client.get(f"{BASE_URL}/{test_product.id}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    
+    
+
+
+    def test_update_product(self):
+        """It should Update an existing Product"""
+        # create a product to update
+        test_product = ProductFactory()
+        response = self.client.post(BASE_URL, json=test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # update the product
+        new_product = response.get_json()
+        logging.debug(new_product)
+        new_product["price"] = 100
+        response = self.client.put(f"{BASE_URL}/{new_product['id']}", json=new_product)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_product = response.get_json()
+        self.assertEqual(updated_product["price"], 100)
+
