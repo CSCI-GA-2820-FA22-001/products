@@ -143,6 +143,16 @@ class TestProductServer(TestCase):
         self.assertEqual(new_product["price"], test_product.price)
         self.assertEqual(new_product["description"], test_product.description)
 
+
+    def test_delete_product(self):
+        """ It should Delete a Product """
+        test_product = self._create_products(1)[0]
+        response = self.client.delete(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        response = self.client.get(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     
     
 
@@ -162,3 +172,4 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_product = response.get_json()
         self.assertEqual(updated_product["price"], 100)
+
