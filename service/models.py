@@ -48,10 +48,8 @@ class Product(db.Model):
         """
         logger.info("Creating %s", self.name)
         self.id = None  # id must be none to generate next primary key
-        if self.product_validation():
-            db.session.add(self)
-            db.session.commit()
-        
+        db.session.add(self)
+        db.session.commit()
 
     def update(self):
         """
@@ -83,17 +81,30 @@ class Product(db.Model):
             data (dict): A dictionary containing the Product data
         """
         try:
-            self.name = data["name"]
+            name = data.get("name", "")
             # self.category = data["category"]
             self.description = data["description"]
             # Check the validity of the price attribute
             price = data.get("price", "")
+
             if isinstance(price, int) or (price and price.isdigit()):
                 self.price = int(price)
             else:
                 raise DataValidationError(
                     "Invalid type for integer [price]: "
                     + str(type(data["price"]))
+                )
+            if price >= 0:
+                self.price = price
+            else:
+                raise DataValidationError(
+                    "Invalid value for [price]. Price should be a non-negative value"
+                )
+            if 0 < len(name) <= 20:
+                self.name = name
+            else:
+                raise DataValidationError(
+                    "Invalid value for [name]. Name length should between 1 - 20 characters."
                 )
         # except AttributeError as error:
         #     raise DataValidationError("Invalid attribute: " + error.args[0]) from error
@@ -163,18 +174,16 @@ class Product(db.Model):
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
 
-    def product_validation(self):
-        """ Check if the production information is valid """
-        if len(self.name) > 20:
-            return False
-        if self.name[0].islower():
-            return False
-        if not isinstance(self.price, int):
-            return False
-        if self.price < 0:
-            return False
-        if not self.description:
-            return False
+    @classmethod
+    def find_by_id(cls, id: str) -> list:
+        """Returns all Products with the given name
 
-        return True
-        
+        :param name: the name of the Products you want to match
+        :type name: str
+
+        :return: a collection of Products with that name
+        :rtype: list
+
+        """
+        logger.info("Processing id query for %s ...", id)
+        return cls.query.filter(cls.id == id)

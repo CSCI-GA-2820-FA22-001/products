@@ -182,18 +182,3 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(Product.all()), 1)
         product.delete()
         self.assertEqual(len(Product.all()), 0)
-
-    def test_valid_product(self):
-        """ It should check the product information is valid """
-        product = Product(name = "Iphone", price = 50, description = 'this is iphone')
-        self.assertTrue(product.name[0].isupper())
-        self.assertTrue(len(product.name) <= 20)
-        self.assertTrue(product.price >= 0)
-        self.assertTrue(len(product.description) >= 1)
-
-    def test_invalid_product_name(self):
-        """ It should check the product information is invalid """
-        product = Product(name = "iphone", price = 50, description = 'this is iphone')
-        self.assertTrue(not product.name[0].isupper())
-        self.assertTrue(not len(product.name) <= 20)
-        
