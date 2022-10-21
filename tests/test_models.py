@@ -78,7 +78,7 @@ class TestProductModel(unittest.TestCase):
         for _ in range(5):
             pet = ProductFactory()
             pet.create()
-        # See if we get back 5 pets
+        # See if we get back 5 products
         products = Product.all()
         self.assertEqual(len(products), 5)
 
