@@ -181,6 +181,7 @@ class TestProductModel(unittest.TestCase):
 
     def test_decrease_a_product_a_like(self):
         """It should Decrease a Product with one like"""
+        
         #First initiate the product with 10 likes.
         product = ProductFactory()
         logging.debug(product)
