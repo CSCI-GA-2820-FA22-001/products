@@ -11,7 +11,7 @@ To start the service.\
 run command as follow in command line
 
 ```bash
-    falsk run
+    flask run
 ```
 
 You Would Get these information in your browser
