@@ -143,6 +143,16 @@ class TestProductServer(TestCase):
         self.assertEqual(new_product["price"], test_product.price)
         self.assertEqual(new_product["description"], test_product.description)
 
+
+    def test_delete_product(self):
+        """ It should Delete a Product """
+        test_product = self._create_products(1)[0]
+        response = self.client.delete(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+        response = self.client.get(f"{BASE_URL}/{test_product.id}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     
     
 
@@ -162,3 +172,51 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_product = response.get_json()
         self.assertEqual(updated_product["price"], 100)
+
+    def test_create_product_negative_price(self):
+        """ It should identify the price is invalid if price is negative """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.price = -5
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_create_product_price_type_string(self):
+        """ It should identify the price is invalid if price is not digit """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.price = "s"
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_product_price_type_digit(self):
+        """ It should identify the price is invalid if price is not digit """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.price = "5"
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_create_product_exceed_maxlength_name(self):
+        """ It should identify the invalid name if name is not capitalized or exceed 20 characters"""
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.name = "Abcdefghijklmnopqrstuv"
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+    def test_create_product_no_data(self):
+        """ It should not Create a Product with missing data """
+        response = self.client.post(BASE_URL, json = {})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_product_no_content_type(self):
+        """ It should not Create a Product with no content type """
+        response = self.client.post(BASE_URL)
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+   

@@ -198,7 +198,6 @@ class TestProductModel(unittest.TestCase):
 
     def test_decrease_a_product_a_like(self):
         """It should Decrease a Product with one like"""
-        
         #First initiate the product with 10 likes.
         product = ProductFactory()
         logging.debug(product)
@@ -230,3 +229,10 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
         self.assertEqual(products[0].like, 9)
+    def test_delete_a_product(self):
+        """ It should Delete a product """
+        product = ProductFactory()
+        product.create()
+        self.assertEqual(len(Product.all()), 1)
+        product.delete()
+        self.assertEqual(len(Product.all()), 0)

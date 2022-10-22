@@ -1,64 +1,122 @@
-# NYU DevOps Project Template
+# NYU DevOps Project-Product
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
 
-This is a skeleton you can use to start your projects
+This is the product services for NYU Devops fall 2022 E-commerce Project
 
-## Overview
+## Run Code Instruction
 
-This project template contains starter code for your class project. The `/service` folder contains your `models.py` file for your model and a `routes.py` file for your service. The `/tests` folder has test case starter code for testing the model and the service separately. All you need to do is add your functionality. You can use the [lab-flask-tdd](https://github.com/nyu-devops/lab-flask-tdd) for code examples to copy from.
-
-## Automatic Setup
-
-The best way to use this repo is to start your own repo using it as a git template. To do this just press the green **Use this template** button in GitHub and this will become the source for your repository.
-
-## Manual Setup
-
-You can also clone this repository and then copy and paste the starter code into your project repo folder on your local computer. Be careful not to copy over your own `README.md` file so be selective in what you copy.
-
-There are 4 hidden files that you will need to copy manually if you use the Mac Finder or Windows Explorer to copy files from this folder into your repo folder.
-
-These should be copied using a bash shell as follows:
+To start the service.\
+run command as follow in command line
 
 ```bash
-    cp .gitignore  ../<your_repo_folder>/
-    cp .flaskenv ../<your_repo_folder>/
-    cp .gitattributes ../<your_repo_folder>/
+    flask run
 ```
 
-## Contents
+You Would Get these information in your browser
 
-The project contains the following:
-
-```text
-.gitignore          - this will ignore vagrant and other metadata files
-.flaskenv           - Environment variables to configure Flask
-.gitattributes      - File to gix Windows CRLF issues
-.devcontainers/     - Folder with support for VSCode Remote Containers
-dot-env-example     - copy to .env to use environment variables
-requirements.txt    - list if Python libraries required by your code
-config.py           - configuration parameters
-
-service/                   - service python package
-├── __init__.py            - package initializer
-├── models.py              - module with business models
-├── routes.py              - module with service routes
-└── common                 - common code package
-    ├── error_handlers.py  - HTTP error handling code
-    ├── log_handlers.py    - logging setup code
-    └── status.py          - HTTP status constants
-
-tests/              - test cases package
-├── __init__.py     - package initializer
-├── test_models.py  - test suite for business models
-└── test_routes.py  - test suite for service routes
+```
+    {
+        "name": "Product REST API Service", 
+        "paths": "http://127.0.0.1:8000/products", 
+        "version": "1.0"
+    }
 ```
 
-## License
+To run or test our service.\
+run command as follow in command line
 
-Copyright (c) John Rofrano. All rights reserved.
+```bash
+    nosetests
+```
 
-Licensed under the Apache License. See [LICENSE](LICENSE)
+## Table Schema
 
-This repository is part of the NYU masters class: **CSCI-GA.2820-001 DevOps and Agile Methodologies** created and taught by *John Rofrano*, Adjunct Instructor, NYU Courant Institute, Graduate Division, Computer Science, and NYU Stern School of Business.
+```test
+{
+    id                Int           Primary key
+    name              String          
+    Price             Int
+    Description       String
+    Like              Int
+}
+```
+
+## Rest API EndPoints
+
+```
+Product Service
+Paths -- RESTful:
+GET /products - Returns a list all of the Products
+GET /products/{id} - Returns the Product with a given id number
+POST /products - creates a new Product record in the database
+PUT /products/{id} - updates a Product record in the database
+DELETE /products/{id} - deletes a Product record in the database
+```
+
+## List all products
+* URL <br>
+  GET/products c
+* Request Headers: NULL
+* Body: NULL
+* Success Response:
+  * **Code:** HTTP_200_OK <br />
+    **Content:** 
+    ```json
+    {
+        "id": 2,
+        "name" : "iphone",
+        "price" : 50,
+        "description" : "This is iphone"
+    }
+    ```
+
+## Create a product
+* URL <br>
+  POST/products <br>
+* Request Headers: application/json
+* Body 
+{ <br>
+    "id": = 1 <br>
+}
+* Success Response
+  * **Code:** HTTP_201_CREATED <br />
+    **Content:** 
+    ``` json
+    { 
+        "id": 1,
+        "name": "iphone",
+        "price" : 50, 
+        "description" : "This is iphone"
+    }
+    ```
+
+
+## Delete a product
+* URL <br>
+  DELETE /products/<user_id>
+* Request NULL
+* Body NULL
+* Success Response
+  * **Code:** HTTP_204_NO_CONTENT <br />
+    **Content:** 
+    NO_CONTENT
+  
+## Read a product
+* URL <br>
+  GET /poducts/<product_id>
+* Request NULL
+* Body NULL
+* Success Response
+  * **Code:** HTTP_200_OK <br />
+    **Content:** 
+    ```json
+    {
+        "id": 2,
+        "name" : "iphone",
+        "price" : 50,
+        "description" : "This is iphone"
+    }
+    ```
+
