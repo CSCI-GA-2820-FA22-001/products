@@ -57,7 +57,7 @@ DELETE /products/{id} - deletes a Product record in the database
 
 ## List all products
 * URL <br>
-  GET/products <br>
+  GET/products c
 * Request Headers: NULL
 * Body: NULL
 * Success Response:
@@ -75,9 +75,23 @@ DELETE /products/{id} - deletes a Product record in the database
 ## Create a product
 * URL <br>
   POST/products <br>
-* Request Headers
-* Body
+* Request Headers: application/json
+* Body 
+```
+{ <br>
+    "id": = 1 <br>
+}
 * Success Response
+  * **Code:** HTTP_201_CREATED <br />
+    **Content:** 
+    ``` json
+    { 
+        "id": 1,
+        "name": "iphone",
+        "price" : 50, 
+        "description" : "This is iphone"
+    }
+    ```
 
 
 ## Delete a product
