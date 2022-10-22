@@ -55,7 +55,7 @@ PUT /products/{id} - updates a Product record in the database
 DELETE /products/{id} - deletes a Product record in the database
 ```
 
-## Get All products
+## List all products
 * URL <br>
   GET/products <br>
 * Request Headers: NULL
@@ -81,6 +81,7 @@ DELETE /products/{id} - deletes a Product record in the database
   * **Code:** HTTP_204_NO_CONTENT <br />
     **Content:** 
     NO_CONTENT
+  
 ## Read a product
 * URL <br>
   GET /poducts/<product_id>
@@ -94,7 +95,7 @@ DELETE /products/{id} - deletes a Product record in the database
         "id": 2,
         "name" : "iphone",
         "price" : 50,
-        "description" : "This is ihopne"
+        "description" : "This is iphone"
     }
     ```
 
