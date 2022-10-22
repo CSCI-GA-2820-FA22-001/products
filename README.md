@@ -61,8 +61,16 @@ DELETE /products/{id} - deletes a Product record in the database
 * Request Headers: NULL
 * Body: NULL
 * Success Response:
-* Code: HTTP_200_OK
-* Error Response: NULL
+  * **Code:** HTTP_200_OK <br />
+    **Content:** 
+    ```json
+    {
+        "id": 2,
+        "name" : "iphone",
+        "price" : 50,
+        "description" : "This is iphone"
+    }
+    ```
 
 ## Create a product
 * URL <br>
