@@ -57,7 +57,12 @@ DELETE /products/{id} - deletes a Product record in the database
 
 ## Get All products
 
-
+## Create a product
+* URL
+  POST/products
+* Request Headers
+* Body
+* Success Response
 ## Contents
 
 The project contains the following:
