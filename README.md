@@ -77,9 +77,11 @@ DELETE /products/{id} - deletes a Product record in the database
   POST/products <br>
 * Request Headers: application/json
 * Body 
+```
 { <br>
     "id": = 1 <br>
 }
+```
 * Success Response
   * **Code:** HTTP_201_CREATED <br />
     **Content:** 
