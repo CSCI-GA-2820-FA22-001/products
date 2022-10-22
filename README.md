@@ -58,8 +58,8 @@ DELETE /products/{id} - deletes a Product record in the database
 ## Get All products
 
 ## Create a product
-* URL
-  POST/products
+* URL <br>
+  POST/products <br>
 * Request Headers
 * Body
 * Success Response
