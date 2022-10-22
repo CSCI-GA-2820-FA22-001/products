@@ -56,6 +56,13 @@ DELETE /products/{id} - deletes a Product record in the database
 ```
 
 ## Get All products
+* URL <br>
+  GET/products <br>
+* Request Headers: NULL
+* Body: NULL
+* Success Response:
+* Code: HTTP_200_OK
+* Error Response: NULL
 
 ## Create a product
 * URL <br>
