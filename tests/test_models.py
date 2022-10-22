@@ -76,8 +76,8 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(products, [])
         # Create 5 Products
         for _ in range(5):
-            pet = ProductFactory()
-            pet.create()
+            product = ProductFactory()
+            product.create()
         # See if we get back 5 products
         products = Product.all()
         self.assertEqual(len(products), 5)
@@ -175,6 +175,60 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(products[0].id, 1)
         self.assertEqual(products[0].price, 100)
 
+    def test_increase_a_product_a_like(self):
+        """It should Increase a Product with one like"""
+        product = ProductFactory()
+        logging.debug(product)
+        product.id = None
+        product.create()
+        logging.debug(product)
+        self.assertIsNotNone(product.id)
+        # Change it an save it
+        product.like += 1
+        original_id = product.id
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.like, 1)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].like, 1)
+
+    def test_decrease_a_product_a_like(self):
+        """It should Decrease a Product with one like"""
+        #First initiate the product with 10 likes.
+        product = ProductFactory()
+        logging.debug(product)
+        product.id = None
+        product.create()
+        logging.debug(product)
+        self.assertIsNotNone(product.id)
+        # Change it an save it
+        product.like += 10
+        original_id = product.id
+        product.update()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.like, 10)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].like, 10)
+
+        #Second decrease the product with 1 like
+        # Change it an save it
+        product.like -= 1
+        product.update()
+        self.assertEqual(product.like, 9)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, original_id)
+        self.assertEqual(products[0].like, 9)
     def test_delete_a_product(self):
         """ It should Delete a product """
         product = ProductFactory()

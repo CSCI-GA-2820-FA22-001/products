@@ -38,6 +38,7 @@ class Product(db.Model):
     name = db.Column(db.String(63))
     price = db.Column(db.Integer, nullable=False, default=60)
     description = db.Column(db.String(256))
+    like = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
