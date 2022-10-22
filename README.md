@@ -1,31 +1,62 @@
-# NYU DevOps Project Template
+# NYU DevOps Project-Product
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
 
-This is a skeleton you can use to start your projects
+This is the product services for NYU Devops fall 2022 E-commerce Project
 
-## Overview
+## Run Code Instruction
 
-This project template contains starter code for your class project. The `/service` folder contains your `models.py` file for your model and a `routes.py` file for your service. The `/tests` folder has test case starter code for testing the model and the service separately. All you need to do is add your functionality. You can use the [lab-flask-tdd](https://github.com/nyu-devops/lab-flask-tdd) for code examples to copy from.
-
-## Automatic Setup
-
-The best way to use this repo is to start your own repo using it as a git template. To do this just press the green **Use this template** button in GitHub and this will become the source for your repository.
-
-## Manual Setup
-
-You can also clone this repository and then copy and paste the starter code into your project repo folder on your local computer. Be careful not to copy over your own `README.md` file so be selective in what you copy.
-
-There are 4 hidden files that you will need to copy manually if you use the Mac Finder or Windows Explorer to copy files from this folder into your repo folder.
-
-These should be copied using a bash shell as follows:
+To start the service.\
+run command as follow in command line
 
 ```bash
-    cp .gitignore  ../<your_repo_folder>/
-    cp .flaskenv ../<your_repo_folder>/
-    cp .gitattributes ../<your_repo_folder>/
+    falsk run
 ```
+
+You Would Get these information in your browser
+
+```
+    {
+        "name": "Product REST API Service", 
+        "paths": "http://127.0.0.1:8000/products", 
+        "version": "1.0"
+    }
+```
+
+To run or test our service.\
+run command as follow in command line
+
+```bash
+    nosetests
+```
+
+## Table Schema
+
+```test
+{
+    id                Int           Primary key
+    name              String          
+    Price             Int
+    Description       String
+    Like              Int
+}
+```
+
+## Rest API EndPoints
+
+```
+Product Service
+Paths -- RESTful:
+GET /products - Returns a list all of the Products
+GET /products/{id} - Returns the Product with a given id number
+POST /products - creates a new Product record in the database
+PUT /products/{id} - updates a Product record in the database
+DELETE /products/{id} - deletes a Product record in the database
+```
+
+## Get All products
+
 
 ## Contents
 
