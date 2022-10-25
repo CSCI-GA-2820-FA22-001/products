@@ -78,8 +78,8 @@ DELETE /products/{id} - deletes a Product record in the database
 * Request Headers: application/json
 * Body 
 ```
-{
-    "id": = 1
+{ <br>
+    "id": = 1 <br>
 }
 ```
 * Success Response
