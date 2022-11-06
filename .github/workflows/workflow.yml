@@ -15,15 +15,15 @@ jobs:
     # Requiired services    
     services:
       # Label used to access the service container
-      redis:
+      postgres:
         # Docker Hub image
-        image: redis
+        image: postgres:alpine
         # Set health checks to wait until redis has started
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+#         options: >-
+#           --health-cmd "redis-cli ping"
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
 
     # Steps for the build
     steps:
@@ -45,7 +45,7 @@ jobs:
       - name: Run unit tests with nose
         run: nosetests
         env:
-          DATABASE_URI: "redis://redis:6379"
+          DATABASE_URI: "postgresql://postgres:postgres@postgres:5432/postgres"
 
       # Uncomment the following 2 lines during hands-on lab
       
