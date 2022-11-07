@@ -4,8 +4,10 @@ Werkzeug==2.1.2
 # Build dependencies
 Flask==2.1.2
 Flask-SQLAlchemy==2.5.1
-psycopg2-binary
-# psycopg2==2.9.3
+#gcc == 11.2
+#libpq-dev==9.4.3
+#psycopg2-binary
+psycopg2==2.9.3
 python-dotenv==0.20.0
 
 # Runtime dependencies
