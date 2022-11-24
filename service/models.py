@@ -188,14 +188,14 @@ class Product(db.Model):
         logger.info("Processing name query for %s ...", category)
         return cls.query.filter(cls.category == category)
 
-    @classmethod
-    def find_by_price(cls, low: int, high: int) -> list:
-        """Returns all Products with the given price range
-        :param low: lower bound of the price range
-        :param high: higher bound of the price range
-        :return: a collection of Products within that price range
-        :type: list
-        """
+    # @classmethod
+    # def find_by_price(cls, low: int, high: int) -> list:
+    #     """Returns all Products with the given price range
+    #     :param low: lower bound of the price range
+    #     :param high: higher bound of the price range
+    #     :return: a collection of Products within that price range
+    #     :type: list
+    #     """
 
-        logger.info("Processing price query for price range between %i", low)
-        return cls.query.filter(cls.price_range == (low, high))
+    #     logger.info("Processing price query for price range between %i", low)
+    #     return cls.query.filter(cls.price_range == (low, high))
