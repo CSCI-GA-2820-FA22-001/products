@@ -68,6 +68,8 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_product.id, product.id)
         self.assertEqual(found_product.name, product.name)
         self.assertEqual(found_product.price, product.price)
+        self.assertEqual(found_product.description, product.description)
+        self.assertEqual(found_product.like, product.like)
         self.assertTrue(True)
 
     def test_get_all_products(self):
@@ -97,6 +99,8 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.id, products[2].id)
         self.assertEqual(product.name, products[2].name)
         self.assertEqual(product.price, products[2].price)
+        self.assertEqual(product.description, products[2].description)
+        self.assertEqual(product.like, products[2].like)
     
     def test_find_by_name(self):
         """It should Find a Product by Name"""
@@ -110,8 +114,14 @@ class TestProductModel(unittest.TestCase):
                 count_name += 1
         found_products = Product.find_by_name(name)
         self.assertEqual(found_products.count(), count_name)
-        self.assertEqual(found_products[0].name, products[1].name)
+        for product in found_products:
+            if product.name == name and product.price == products[1].price and product.description == products[1].description:
+                self.assertEqual(product.like, products[1].like)
+                self.assertTrue(True)
+
+        # self.assertEqual(found_products[0].name, products[1].name)
         # self.assertEqual(found_products[0].price, products[1].price)
+        # self.assertEqual(found_products[0].description, products[1].description)
 
     def test_find_or_404_found(self):
         """It should Find or return 404 not found"""
@@ -124,6 +134,8 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.id, products[1].id)
         self.assertEqual(product.name, products[1].name)
         self.assertEqual(product.price, products[1].price)
+        self.assertEqual(product.description, products[1].description)
+        self.assertEqual(product.like, products[1].like)
     
     def test_find_or_404_not_found(self):
         """It should return 404 not found"""
@@ -131,13 +143,14 @@ class TestProductModel(unittest.TestCase):
     
     def test_create_a_product(self):
         """ It should Create a product and assert that it exists """
-        product = Product(name = "iphone", price = 50, description = 'this is iphone')
+        product = Product(name = "iphone", price = 50, description = 'this is iphone', like = 0)
         self.assertEqual(str(product), "<Product 'iphone' id=[None]>")
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
         self.assertEqual(product.name, 'iphone')
         self.assertEqual(product.price,50)
         self.assertEqual(product.description, "this is iphone")
+        self.assertEqual(product.like, 0)
         product = Product(name = "iphone", price = 60, description = 'this is two iphone')
         self.assertEqual(product.price,60)
         self.assertEqual(product.description, "this is two iphone")
@@ -165,6 +178,7 @@ class TestProductModel(unittest.TestCase):
         # Change it an save it
         product.price = 100
         original_id = product.id
+        original_like = product.like
         product.update()
         self.assertEqual(product.id, original_id)
         self.assertEqual(product.price, 100)
@@ -174,6 +188,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, 1)
         self.assertEqual(products[0].price, 100)
+        self.assertEqual(products[0].like, original_like)
 
     def test_increase_a_product_a_like(self):
         """It should Increase a Product with one like"""
@@ -184,17 +199,18 @@ class TestProductModel(unittest.TestCase):
         logging.debug(product)
         self.assertIsNotNone(product.id)
         # Change it an save it
+        original_like = product.like
         product.like += 1
         original_id = product.id
         product.update()
         self.assertEqual(product.id, original_id)
-        self.assertEqual(product.like, 1)
+        self.assertEqual(product.like, original_like + 1)
         # Fetch it back and make sure the id hasn't changed
         # but the data did change
         products = Product.all()
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
-        self.assertEqual(products[0].like, 1)
+        self.assertEqual(products[0].like, original_like + 1)
 
     def test_decrease_a_product_a_like(self):
         """It should Decrease a Product with one like"""
@@ -206,29 +222,31 @@ class TestProductModel(unittest.TestCase):
         logging.debug(product)
         self.assertIsNotNone(product.id)
         # Change it an save it
+        original_like = product.like
         product.like += 10
         original_id = product.id
         product.update()
         self.assertEqual(product.id, original_id)
-        self.assertEqual(product.like, 10)
+        self.assertEqual(product.like, original_like + 10)
         # Fetch it back and make sure the id hasn't changed
         # but the data did change
         products = Product.all()
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
-        self.assertEqual(products[0].like, 10)
+        self.assertEqual(products[0].like, original_like + 10)
 
         #Second decrease the product with 1 like
         # Change it an save it
         product.like -= 1
         product.update()
-        self.assertEqual(product.like, 9)
+        self.assertEqual(product.like, original_like + 9)
         # Fetch it back and make sure the id hasn't changed
         # but the data did change
         products = Product.all()
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
-        self.assertEqual(products[0].like, 9)
+        self.assertEqual(products[0].like, original_like + 9)
+
     def test_delete_a_product(self):
         """ It should Delete a product """
         product = ProductFactory()

@@ -71,7 +71,8 @@ class Product(db.Model):
             "id": self.id,
             "name": self.name,
             "price": self.price,
-            "description": self.description
+            "description": self.description,
+            "like": self.like
         }
 
     def deserialize(self, data):
