@@ -1,7 +1,7 @@
 # These can be overidden with env vars.
 REGISTRY ?= us.icr.io
-NAMESPACE ?= nyu_devops
-IMAGE_NAME ?= lab-bluemix-cf
+NAMESPACE ?= haohui
+IMAGE_NAME ?= products
 IMAGE_TAG ?= 1.0
 IMAGE ?= $(REGISTRY)/$(NAMESPACE)/$(IMAGE_NAME):$(IMAGE_TAG)
 # PLATFORM ?= "linux/amd64,linux/arm64"
