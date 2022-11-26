@@ -72,6 +72,7 @@ class Product(db.Model):
             "name": self.name,
             "price": self.price,
             "description": self.description,
+            "like": self.like,
             "category": self.category
         }
 
