@@ -254,3 +254,14 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(Product.all()), 1)
         product.delete()
         self.assertEqual(len(Product.all()), 0)
+
+    def test_find_by_category(self):
+        """ It should find products by category """
+        Product(name = "Macbook Pro", category = "laptop", description = "test", price = 2000).create()
+        Product(name = "Think Pad", category = "laptop", description = "test", price = 1800).create()
+        products = Product.find_by_category("laptop")
+        self.assertEqual(products[0].name, "Macbook Pro")
+        self.assertEqual(products[0].category, "laptop")
+        self.assertEqual(products[0].description, "test")
+        self.assertEqual(products[0].price, 2000)
+        
