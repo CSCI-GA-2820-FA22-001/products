@@ -39,7 +39,7 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False, default=60)
     description = db.Column(db.String(256))
     like = db.Column(db.Integer, default=0)
-
+    category = db.Column(db.String(63))
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
 
@@ -71,7 +71,8 @@ class Product(db.Model):
             "id": self.id,
             "name": self.name,
             "price": self.price,
-            "description": self.description
+            "description": self.description,
+            "category": self.category
         }
 
     def deserialize(self, data):
@@ -83,7 +84,7 @@ class Product(db.Model):
         """
         try:
             name = data.get("name", "")
-            # self.category = data["category"]
+            self.category = data["category"]
             self.description = data["description"]
             # Check the validity of the price attribute
             price = data.get("price", "")
@@ -174,3 +175,27 @@ class Product(db.Model):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
+
+    @classmethod
+    def find_by_category(cls, category: str) -> list:
+        """Returns all Products with the given category
+        :param category: the category of the Products you want to match
+        :type category: str
+        :return: a collection of Products with that category
+        :type: list
+        """
+        
+        logger.info("Processing name query for %s ...", category)
+        return cls.query.filter(cls.category == category)
+
+    # @classmethod
+    # def find_by_price(cls, low: int, high: int) -> list:
+    #     """Returns all Products with the given price range
+    #     :param low: lower bound of the price range
+    #     :param high: higher bound of the price range
+    #     :return: a collection of Products within that price range
+    #     :type: list
+    #     """
+
+    #     logger.info("Processing price query for price range between %i", low)
+    #     return cls.query.filter(cls.price_range == (low, high))
