@@ -37,4 +37,5 @@
 			"helm": "latest",
 			"minikube": "none"
 		}
+	}
 }
