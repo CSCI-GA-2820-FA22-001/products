@@ -1,5 +1,5 @@
 # Image for a Python 3 development environment
-FROM python:3.9-slim
+FROM rofrano/pipeline-selenium:3.9-slim
 
 # Add any tools that are needed beyond Python 3.9
 RUN apt-get update && \
