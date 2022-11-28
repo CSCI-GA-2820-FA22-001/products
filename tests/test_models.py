@@ -255,6 +255,16 @@ class TestProductModel(unittest.TestCase):
         product.delete()
         self.assertEqual(len(Product.all()), 0)
 
+    def test_find_by_price_range(self):
+        """ It should find a product based on the range"""
+        products = ProductFactory.create_batch(6)
+        lower_range, upper_range = 120, 300
+        count = len([product for product in products if product.price >= lower_range and product.price <= upper_range])
+        for p in products:
+            p.create()
+        found_products = Product.find_by_price_range(lower_range, upper_range)
+        self.assertEqual(count, found_products.count())
+        
     def test_find_by_category(self):
         """ It should find products by category """
         Product(name = "Macbook Pro", category = "laptop", description = "test", price = 2000).create()
