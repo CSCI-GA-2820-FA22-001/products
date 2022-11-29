@@ -1,19 +1,18 @@
-Feature: The pet store service back-end
-    As a Pet Store Owner
+Feature: The product store service back-end
+    As a Product Store Owner
     I need a RESTful catalog service
-    So that I can keep track of all my pets
+    So that I can keep track of all my products
 
 Background:
-    Given the following pets
-        | name       | category | available | gender  | birthday   |
-        | fido       | dog      | True      | MALE    | 2019-11-18 |
-        | kitty      | cat      | True      | FEMALE  | 2020-08-13 |
-        | leo        | lion     | False     | MALE    | 2021-04-01 |
-        | sammy      | snake    | True      | UNKNOWN | 2018-06-04 |
+    Given the following products
+        | name       | category | description       | price | like  | 
+        | iphone     | apple    | This is iphone    | 2000  | 5     |
+        | ipad       | pad      | This is Ipad      | 3000  | 9     |
+        | AK-47      | gun      | Good Luck         | 2500  | 222   |
 
 Scenario: The server is running
     When I visit the "Home Page"
-    Then I should see "Pet Demo RESTful Service" in the title
+    Then I should see "Product Demo RESTful Service" in the title
     And I should not see "404 Not Found"
 
 Scenario: Create a Pet
