@@ -29,15 +29,16 @@ def healthcheck():
 @app.route("/")
 def index():
     """Root URL response"""
-    app.logger.info("Request for Root URL")
-    return (
-        jsonify(
-            name="Product REST API Service",
-            version="1.0",
-            paths=url_for("list_products", _external=True),
-        ),
-        status.HTTP_200_OK,
-    )
+    # app.logger.info("Request for Root URL")
+    # return (
+    #     jsonify(
+    #         name="Product REST API Service",
+    #         version="1.0",
+    #         paths=url_for("list_products", _external=True),
+    #     ),
+    #     status.HTTP_200_OK,
+    # )
+    return app.send_static_file("index.html")
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
