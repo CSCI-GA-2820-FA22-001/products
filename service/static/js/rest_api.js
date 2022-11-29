@@ -6,25 +6,25 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#pet_id").val(res.id);
-        $("#pet_name").val(res.name);
-        $("#pet_category").val(res.category);
-        if (res.available == true) {
-            $("#pet_available").val("true");
+        $("#product_id").val(res.id);
+        $("#product_name").val(res.name);
+        $("#product_category").val(res.category);
+        $("#product_description").val(res.description);
+        $("#product_price").val(res.price);
+        if (res.like == true) {
+            $("#product_like").val("true");
         } else {
-            $("#pet_available").val("false");
+            $("#product_like").val("false");
         }
-        $("#pet_gender").val(res.gender);
-        $("#pet_birthday").val(res.birthday);
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#pet_name").val("");
-        $("#pet_category").val("");
-        $("#pet_available").val("");
-        $("#pet_gender").val("");
-        $("#pet_birthday").val("");
+        $("#product_name").val("");
+        $("#product_category").val("");
+        $("#product_description").val("");
+        $("#product_price").val("");
+        $("#product_like").val("");
     }
 
     // Updates the flash message area
@@ -150,20 +150,20 @@ $(function () {
 
     $("#delete-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let product_id = $("#product_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "DELETE",
-            url: `/pets/${pet_id}`,
+            url: `/products/${product_id}`,
             contentType: "application/json",
             data: '',
         })
 
         ajax.done(function(res){
             clear_form_data()
-            flash_message("Pet has been Deleted!")
+            flash_message("Product has been Deleted!")
         });
 
         ajax.fail(function(res){
