@@ -77,11 +77,13 @@ class TestProductServer(TestCase):
     def test_index(self):
         """ It should call the home page """
         response = self.client.get("/")
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         data = response.get_json()
+#         self.assertEqual(data["name"], "Product REST API Service")
+#         self.assertEqual(data["version"], "1.0")
+#         self.assertEqual(data["paths"],"http://localhost/products")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
-        self.assertEqual(data["name"], "Product REST API Service")
-        self.assertEqual(data["version"], "1.0")
-        self.assertEqual(data["paths"],"http://localhost/products")
+        self.assertIn(b"Pet Demo REST API Service", response.data)
         
 
     def test_health(self):
