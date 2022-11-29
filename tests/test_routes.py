@@ -83,7 +83,7 @@ class TestProductServer(TestCase):
 #         self.assertEqual(data["version"], "1.0")
 #         self.assertEqual(data["paths"],"http://localhost/products")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn(b"Pet Demo REST API Service", response.data)
+        self.assertIn(b"Product Demo REST API Service", response.data)
         
 
     def test_health(self):
