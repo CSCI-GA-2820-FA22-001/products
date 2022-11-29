@@ -27,15 +27,15 @@ from behave import given
 from compare import expect
 
 
-@given('the following pets')
+@given('the following products')
 def step_impl(context):
     """ Delete all Pets and load new ones """
     # List all of the pets and delete them one by one
-    rest_endpoint = f"{context.BASE_URL}/pets"
+    rest_endpoint = f"{context.BASE_URL}/products"
     context.resp = requests.get(rest_endpoint)
     expect(context.resp.status_code).to_equal(200)
-    for pet in context.resp.json():
-        context.resp = requests.delete(f"{rest_endpoint}/{pet['id']}")
+    for product in context.resp.json():
+        context.resp = requests.delete(f"{rest_endpoint}/{product['id']}")
         expect(context.resp.status_code).to_equal(204)
 
     # load the database with new pets
@@ -43,9 +43,9 @@ def step_impl(context):
         payload = {
             "name": row['name'],
             "category": row['category'],
-            "available": row['available'] in ['True', 'true', '1'],
-            "gender": row['gender'],
-            "birthday": row['birthday']
+            "description": row['description'],
+            "price": row['price'],
+            "like": row['like'] in ['True', 'true', '1'],
         }
         context.resp = requests.post(rest_endpoint, json=payload)
         expect(context.resp.status_code).to_equal(201)
