@@ -12,7 +12,6 @@ $(function () {
         $("#product_description_for_update").val(res.description);
         $("#product_price_for_update").val(res.price);
         
-        $("#product_like_for_update").val(0);
         
     }
     function update_form_data_for_create(res) {
@@ -113,14 +112,11 @@ $(function () {
         let category = $("#product_category_for_update").val();
         let description = $("#product_description_for_update").val();
         let price = $("#product_price_for_update").val();
-        let like = $("#product_like_for_update").val();
-
         let data = {
             "name": name,
             "category": category,
             "description": description,
             "price": price,
-            "like": like
         };
 
         $("#flash_message").empty();
