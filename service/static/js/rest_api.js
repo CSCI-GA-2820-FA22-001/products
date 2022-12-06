@@ -79,26 +79,26 @@ $(function () {
 
     $("#update-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
-        let birthday = $("#pet_birthday").val();
+        let product_id = $("#product_id").val();
+        let name = $("#product_name").val();
+        let category = $("#product_category").val();
+        let description = $("#product_description").val();
+        let price = $("#product_price").val();
+        let like = $("#product_like").val();
 
         let data = {
             "name": name,
             "category": category,
-            "available": available,
-            "gender": gender,
-            "birthday": birthday
+            "description": description,
+            "price": price,
+            "like": like
         };
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
                 type: "PUT",
-                url: `/pets/${pet_id}`,
+                url: `/products/${product_id}`,
                 contentType: "application/json",
                 data: JSON.stringify(data)
             })
