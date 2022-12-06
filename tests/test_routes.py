@@ -264,3 +264,22 @@ class TestProductServer(TestCase):
         """It not should Like a Product that is not exist"""
         response = self.client.put(f"{BASE_URL}/{324232}/like")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_create_product_string_like(self):
+        """ It should identify the like is invalid if like count is a string """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.like = 'a'
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_create_like_negative(self):
+        """ It should identify the like is invalid if like count is negative """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.like = -5
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
