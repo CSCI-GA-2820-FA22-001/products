@@ -11,11 +11,9 @@ $(function () {
         $("#product_category").val(res.category);
         $("#product_description").val(res.description);
         $("#product_price").val(res.price);
-        if (res.like == true) {
-            $("#product_like").val(1);
-        } else {
-            $("#product_like").val(0);
-        }
+        
+        $("#product_like").val(0);
+        
     }
 
     /// Clears all form fields
@@ -24,7 +22,7 @@ $(function () {
         $("#product_category").val("");
         $("#product_description").val("");
         $("#product_price").val("");
-        $("#product_like").val("");
+        
     }
 
     // Updates the flash message area
@@ -63,8 +61,8 @@ $(function () {
         });
 
         ajax.done(function(res){
-            update_form_data(res)
-            flash_message("Success")
+            // update_form_data(res)
+            flash_message("SUCCESS")
         });
 
         ajax.fail(function(res){
