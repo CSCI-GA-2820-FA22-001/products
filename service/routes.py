@@ -8,7 +8,7 @@ PUT /products/{id} - updates a Product record in the database
 DELETE /products/{id} - deletes a Product record in the database
 """
 
-from flask import jsonify, request, url_for, abort
+from flask import jsonify, request, url_for, abort,make_response
 from service.models import Product
 from service.common import status  # HTTP Status Codes
 from . import app  # Import Flask application
@@ -163,3 +163,15 @@ def update_products(product_id):
     app.logger.info("Product with ID [%s] updated.", product.id)
     return jsonify(product.serialize()), status.HTTP_200_OK
 
+######################################################################
+# LIKE A PRODUCT
+######################################################################
+@app.route("/products/<int:product_id>/like", methods=["PUT"])
+def like_products(product_id):
+    """Purchasing a Pet makes it unavailable"""
+    product = Product.find(product_id)
+    if not product:
+        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
+    product.like += 1
+    product.update()
+    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)

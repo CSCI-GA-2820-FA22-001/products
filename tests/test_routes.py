@@ -222,3 +222,19 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
    
+# ----------------------------------------------------------
+# TEST ACTION
+# ----------------------------------------------------------
+    def test_like_a_product(self):
+        """It should Like a Product"""
+        products = self._create_products(10)
+        # available_pets = [pet for pet in pets if pet.available is True]
+        product = products[0]
+        old_like_count = product.like
+        response = self.client.put(f"{BASE_URL}/{product.id}/like")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(f"{BASE_URL}/{product.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        logging.debug("Response data: %s", data)
+        self.assertEqual(data["like"], old_like_count + 1)
