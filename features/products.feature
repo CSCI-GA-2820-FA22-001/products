@@ -29,7 +29,7 @@ Scenario: Like a Product
     And I set the "Name for create" to "Switch"
     And I set the "Category for create" to "Gamming"
     And I set the "Description for create" to "This is Switch"
-    And I set the "Price for create" to "2999"
+    And I set the "Price for create" to "3999"
     And I press the "Create" button
     Then I should see the message "SUCCESS"
     When I copy the "Id Created" field
@@ -42,7 +42,7 @@ Scenario: Like a Product
     When I paste the "ID for Like" field
     And I press the "Like" button
     Then I should see the message "Product like count increment by 1!"
-    And I should not see "1" in the results
+    And I should see "1" in the results
     And I should not see "2" in the results
 
 
