@@ -88,7 +88,7 @@ class Product(db.Model):
             self.category = data["category"]
             self.description = data["description"]
             # Check the validity of the price attribute
-            price = data.get("price", "")
+            price = data.get("price")
 
             if isinstance(price, int) or (price and price.isdigit()):
                 self.price = int(price)
@@ -97,17 +97,17 @@ class Product(db.Model):
                     "Invalid type for integer [price]: "
                     + str(type(data["price"]))
                 )
-            if price >= 0:
-                self.price = price
+            if int(price) >= 0:
+                self.price = int(price)
             else:
                 raise DataValidationError(
-                    "Invalid value for [price]. Price should be a non-negative value"
+                    "Invalid value for price. Price should be a non-negative value"
                 )
             if 0 < len(name) <= 20:
                 self.name = name
             else:
                 raise DataValidationError(
-                    "Invalid value for [name]. Name length should between 1 - 20 characters."
+                    "Invalid value for name. Name length should between 1 - 20 characters."
                 )
         # except AttributeError as error:
         #     raise DataValidationError("Invalid attribute: " + error.args[0]) from error
