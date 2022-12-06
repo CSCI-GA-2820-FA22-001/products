@@ -174,6 +174,19 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_product = response.get_json()
         self.assertEqual(updated_product["price"], 100)
+    
+    def test_update_a_non_exist_product(self):
+        """It not should Update a Product that is not exist"""
+        test_product = ProductFactory()
+        response = self.client.post(BASE_URL, json=test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # update the product
+        new_product = response.get_json()
+        logging.debug(new_product)
+        new_product["price"] = 100
+        response = self.client.put(f"{BASE_URL}/{new_product['id'] + 1}", json=new_product)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_product_negative_price(self):
         """ It should identify the price is invalid if price is negative """
@@ -193,14 +206,14 @@ class TestProductServer(TestCase):
         response = self.client.post(BASE_URL, json = test_product.serialize())
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_product_price_type_digit(self):
-        """ It should identify the price is invalid if price is not digit """
-        test_product = ProductFactory()
-        logging.debug(test_product)
+    # def test_create_product_price_type_digit(self):
+    #     """ It should identify the price is invalid if price is not digit """
+    #     test_product = ProductFactory()
+    #     logging.debug(test_product)
 
-        test_product.price = "5"
-        response = self.client.post(BASE_URL, json = test_product.serialize())
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    #     test_product.price = "5"
+    #     response = self.client.post(BASE_URL, json = test_product.serialize())
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
     def test_create_product_exceed_maxlength_name(self):
         """ It should identify the invalid name if name is not capitalized or exceed 20 characters"""
@@ -222,3 +235,51 @@ class TestProductServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
    
+# ----------------------------------------------------------
+# TEST ACTION
+# ----------------------------------------------------------
+    def test_like_a_product(self):
+        """It should Like a Product"""
+        products = self._create_products(10)
+        # available_pets = [pet for pet in pets if pet.available is True]
+        product = products[0]
+        old_like_count = product.like
+        response = self.client.put(f"{BASE_URL}/{product.id}/like")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(f"{BASE_URL}/{product.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        logging.debug("Response data: %s", data)
+        self.assertEqual(data["like"], old_like_count + 1)
+
+        response = self.client.put(f"{BASE_URL}/{product.id}/like")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(f"{BASE_URL}/{product.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        logging.debug("Response data: %s", data)
+        self.assertEqual(data["like"], old_like_count + 2)
+    
+    def test_like_a_non_exist_product(self):
+        """It not should Like a Product that is not exist"""
+        response = self.client.put(f"{BASE_URL}/{324232}/like")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_create_product_string_like(self):
+        """ It should identify the like is invalid if like count is a string """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.like = 'a'
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_create_like_negative(self):
+        """ It should identify the like is invalid if like count is negative """
+        test_product = ProductFactory()
+        logging.debug(test_product)
+
+        test_product.like = -5
+        response = self.client.post(BASE_URL, json = test_product.serialize())
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

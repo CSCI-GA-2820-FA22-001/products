@@ -47,7 +47,8 @@ class Product(db.Model):
         """
         Creates a Product to the database
         """
-        logger.info("Creating %s", self.name)
+        logger.info("Creating:%s", self.name)
+        logger.info("Creating like count:%s",self.like)
         self.id = None  # id must be none to generate next primary key
         db.session.add(self)
         db.session.commit()
@@ -57,6 +58,7 @@ class Product(db.Model):
         Updates a Product to the database
         """
         logger.info("Saving %s", self.name)
+        logger.info("like count is %s", self.like)
         db.session.commit()
 
     def delete(self):
@@ -88,7 +90,23 @@ class Product(db.Model):
             self.category = data["category"]
             self.description = data["description"]
             # Check the validity of the price attribute
-            price = data.get("price", "")
+            price = data.get("price")
+
+            like = data.get("like",0)
+
+            if isinstance(like, int) or (isinstance(like, str) and like.isdigit()):
+                self.like = int(like)
+            else:
+                raise DataValidationError(
+                    "Invalid type for integer [like]: "
+                    + str(type(data["like"]))
+                )
+            if int(like) >= 0:
+                self.like= int(like)
+            else:
+                raise DataValidationError(
+                    "Invalid value for price. Price should be a non-negative value"
+                )
 
             if isinstance(price, int) or (price and price.isdigit()):
                 self.price = int(price)
@@ -97,17 +115,17 @@ class Product(db.Model):
                     "Invalid type for integer [price]: "
                     + str(type(data["price"]))
                 )
-            if price >= 0:
-                self.price = price
+            if int(price) >= 0:
+                self.price = int(price)
             else:
                 raise DataValidationError(
-                    "Invalid value for [price]. Price should be a non-negative value"
+                    "Invalid value for price. Price should be a non-negative value"
                 )
             if 0 < len(name) <= 20:
                 self.name = name
             else:
                 raise DataValidationError(
-                    "Invalid value for [name]. Name length should between 1 - 20 characters."
+                    "Invalid value for name. Name length should between 1 - 20 characters."
                 )
         # except AttributeError as error:
         #     raise DataValidationError("Invalid attribute: " + error.args[0]) from error
@@ -147,6 +165,7 @@ class Product(db.Model):
 
         """
         logger.info("Processing lookup for id %s ...", product_id)
+
         return cls.query.get(product_id)
 
     @classmethod
