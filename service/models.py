@@ -94,12 +94,18 @@ class Product(db.Model):
 
             like = data.get("like",0)
 
-            if isinstance(like, int) and like >= 0:
+            if isinstance(like, int) or (isinstance(like, str) and like.isdigit()):
                 self.like = int(like)
             else:
                 raise DataValidationError(
                     "Invalid type for integer [like]: "
                     + str(type(data["like"]))
+                )
+            if int(like) >= 0:
+                self.like= int(like)
+            else:
+                raise DataValidationError(
+                    "Invalid value for price. Price should be a non-negative value"
                 )
 
             if isinstance(price, int) or (price and price.isdigit()):
