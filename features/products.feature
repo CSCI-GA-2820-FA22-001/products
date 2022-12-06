@@ -17,10 +17,10 @@ Scenario: The server is running
 
 Scenario: Create a Product
     When I visit the "home page"
-    And I set the "Name" to "iphone"
-    And I set the "Category" to "apple"
-    And I set the "Description" to "This is iphone"
-    And I set the "Price" to "2000"
+    And I set the "Name for create" to "iphone"
+    And I set the "Category for create" to "apple"
+    And I set the "Description for create" to "This is iphone"
+    And I set the "Price for create" to "2000"
     And I press the "Create" button
     Then I should see the message "SUCCESS"
     

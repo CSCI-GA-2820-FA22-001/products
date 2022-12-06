@@ -45,7 +45,7 @@ def step_impl(context):
             "category": row['category'],
             "description": row['description'],
             "price": row['price'],
-            "like": row['like'] in ['True', 'true', '1'],
+            "like": row['like'],
         }
         context.resp = requests.post(rest_endpoint, json=payload)
         expect(context.resp.status_code).to_equal(201)

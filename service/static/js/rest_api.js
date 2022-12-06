@@ -22,7 +22,34 @@ $(function () {
         $("#product_category").val("");
         $("#product_description").val("");
         $("#product_price").val("");
-        
+        $("#product_like").val("");
+
+        $("#product_name_for_create").val("");
+        $("#product_category_for_create").val("");
+        $("#product_description_for_create").val("");
+        $("#product_price_for_create").val("");
+        $("#product_id_created").val("");
+
+        $("#product_id_for_delete").val("");
+
+        $("#product_id_for_update").val("");
+        $("#product_name_for_update").val("");
+        $("#product_category_for_update").val("");
+        $("#product_description_for_update").val("");
+        $("#product_price_for_update").val("");
+
+
+        $("#product_id_for_list").val("");
+        $("#product_name_for_list").val("");
+        $("#product_category_for_list").val("");
+        $("product_price_upper_bound").val("");
+        $("product_price_lower_bound").val("");
+
+        $("#product_id_for_like").val("");
+
+
+
+
     }
 
     // Updates the flash message area
@@ -37,11 +64,11 @@ $(function () {
 
     $("#create-btn").click(function () {
 
-        let name = $("#product_name").val();
-        let category = $("#product_category").val();
-        let description = $("#product_description").val();
-        let price = $("#product_price").val();
-        let like = $("#product_like").val();
+        let name = $("#product_name_for_create").val();
+        let category = $("#product_category_for_create").val();
+        let description = $("#product_description_for_create").val();
+        let price = $("#product_price_for_create").val();
+        let like = $("#product_like_for_create").val();
 
         let data = {
             "name": name,
