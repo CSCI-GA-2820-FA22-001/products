@@ -168,10 +168,12 @@ def update_products(product_id):
 ######################################################################
 @app.route("/products/<int:product_id>/like", methods=["PUT"])
 def like_products(product_id):
-    """Purchasing a Pet makes it unavailable"""
+    """Like a Product makes it Likes Count Increment 1"""
     product = Product.find(product_id)
     if not product:
         abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
+    app.logger.info("Request to like product with id: %s", product_id)
+    app.logger.info("Request to like product with like count: %s", product.like)
     product.like += 1
     product.update()
     return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
