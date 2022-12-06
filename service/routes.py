@@ -176,4 +176,4 @@ def like_products(product_id):
     app.logger.info("Request to like product with like count: %s", product.like)
     product.like += 1
     product.update()
-    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
+    return jsonify(product.serialize()), status.HTTP_200_OK
