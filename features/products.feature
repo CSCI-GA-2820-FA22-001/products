@@ -46,6 +46,16 @@ Feature: The product store service back-end
         Then I should see the message "Product like count increment by 1!"
         And I should see "1" in the results
 
+    Scenario: List all products
+        When I visit the "home page"
+        And I press the "List All" button
+        Then I should see the message "SUCCESS"
+        And I should see "iphone" in the results
+        And I should see "ipad" in the results
+        And I should see "AK-47" in the results
+        And I should not see "pig" in the results
+
+
     Scenario: List products by name
         When I visit the "home page"
         And I set the "Name for List" to "AK-47"
@@ -75,53 +85,24 @@ Feature: The product store service back-end
         And I should see "ipad" in the results
         And I should see "AK-47" in the results
         And I should not see "toy" in the results
-
-    Scenario: List all products
-        When I visit the "home page"
-        And I press the "List All" button
-        Then I should see the message "Success"
-        And I should see "iphone" in the results
-        And I should see "ipad" in the results
-        And I should see "AK-47" in the results
-        And I should not see "pig" in the results
     
 
-
-# Scenario: Search for dogs
-#     When I visit the "home page"
-#     And I set the "Category" to "dog"
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should not see "kitty" in the results
-#     And I should not see "leo" in the results
-
-# Scenario: Search for available
-#     When I visit the "home page"
-#     And I select "True" in the "Available" dropdown
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should see "kitty" in the results
-#     And I should see "sammy" in the results
-#     And I should not see "leo" in the results
-
-Scenario: Update a Product
-    When I visit the "Home Page"
-    And I set the "Name for create" to "iphone"
-    And I set the "Category for create" to "apple"
-    And I set the "Description for create" to "This is iphone"
-    And I set the "Price for create" to "2000"
-    And I press the "Create" button
-    Then I should see the message "SUCCESS"
-    When I copy the "Id created" field
-    And I paste the "Id for update" field
-    And I press the "Retrieve" button
-    Then I should see the message "SUCCESS"
-    And I should see "iphone" in the "Name for Update" field
-    When I change "Name for Update" to "ipad"
-    And I press the "Update" button
-    Then I should see the message "SUCCESS"
-    When I press the "Retrieve" button
-    Then I should see the message "SUCCESS"
-    And I should see "ipad" in the "Name for Update" field
+    Scenario: Update a Product
+        When I visit the "Home Page"
+        And I set the "Name for create" to "iphone"
+        And I set the "Category for create" to "apple"
+        And I set the "Description for create" to "This is iphone"
+        And I set the "Price for create" to "2000"
+        And I press the "Create" button
+        Then I should see the message "SUCCESS"
+        When I copy the "Id created" field
+        And I paste the "Id for update" field
+        And I press the "Retrieve" button
+        Then I should see the message "SUCCESS"
+        And I should see "iphone" in the "Name for Update" field
+        When I change "Name for Update" to "ipad"
+        And I press the "Update" button
+        Then I should see the message "SUCCESS"
+        When I press the "Retrieve" button
+        Then I should see the message "SUCCESS"
+        And I should see "ipad" in the "Name for Update" field

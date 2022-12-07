@@ -428,4 +428,47 @@ $(function () {
 
     });
 
+    // ****************************************
+    // List All Products
+    // ****************************************
+
+    $("#list_all-btn").click(function () {
+
+        $("#flash_message").empty();
+
+        let ajax = $.ajax({
+            type: "GET",
+            url: `/products`,
+            // contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function (res) {
+            //alert(res.toSource())
+            $("#search_results").empty();
+            let table = '<table class="table table-striped" cellpadding="10">'
+            table += '<thead><tr>'
+            table += '<th class="col-md-2">ID</th>'
+            table += '<th class="col-md-2">Name</th>'
+            table += '<th class="col-md-2">Category</th>'
+            table += '<th class="col-md-2">Description</th>'
+            table += '<th class="col-md-2">Price</th>'
+            table += '<th class="col-md-2">Like</th>'
+            table += '</tr></thead><tbody>'
+            for (let i = 0; i < res.length; i++) {
+                let product = res[i];
+                table += `<tr id="row_${i}"><td>${product.id}</td><td>${product.name}</td><td>${product.category}</td><td>${product.description}</td><td>${product.price}</td><td>${product.like}</td></tr>`;
+            }
+            table += '</tbody></table>';
+            $("#search_results").append(table);
+            flash_message("SUCCESS")
+        });
+
+        ajax.fail(function (res) {
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+
 })
