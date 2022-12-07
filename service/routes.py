@@ -77,10 +77,68 @@ def list_products():
     """Returns all of the Products"""
     app.logger.info("Request for Product list")
     products = []
-    products = Product.all()
+
+    category = request.args.get("category")
+    name = request.args.get("name")
+    price_range = request.args.get("price_range")
+
+    if category:
+        app.logger.info("Find by category: %s", category)
+        products = Product.find_by_category(category)
+    elif name:
+        app.logger.info("Find by name: %s", name)
+        products = Product.find_by_name(name)
+    elif price_range:
+        app.logger.info("Find by price range: %s", price_range)
+        low, high = price_range.split("_")
+        products = Product.find_by_price_range(int(low), int(high))
+    else:
+        app.logger.info("Find all")
+        products = Product.all()
+
     results = [product.serialize() for product in products]
-    app.logger.info("Returning %d products", len(results))
+    app.logger.info("[%s] Products returned", len(results))
     return jsonify(results), status.HTTP_200_OK
+
+# ######################################################################
+# # LIST ALL PRODUCTS BY NAME
+# ######################################################################
+# @app.route("/products/<string:product_name>/name", methods=["GET"])
+# def list_products_by_name(product_name):
+#     """Returns all of the Products by given name"""
+#     app.logger.info("Request for Product list by given name")
+#     products = []
+#     products = Product.find_by_name(product_name)
+#     results = [product.serialize() for product in products]
+#     app.logger.info("Returning %d products", len(results))
+#     return jsonify(results), status.HTTP_200_OK
+
+# ######################################################################
+# # LIST ALL PRODUCTS BY CATEGORY
+# ######################################################################
+# @app.route("/products/<string:product_category>/category", methods=["GET"])
+# def list_products_by_category(product_category):
+#     """Returns all of the Products by given category"""
+#     app.logger.info("Request for Product list by given category")
+#     products = []
+#     products = Product.find_by_category(product_category)
+#     results = [product.serialize() for product in products]
+#     app.logger.info("Returning %d products", len(results))
+#     return jsonify(results), status.HTTP_200_OK
+
+# ######################################################################
+# # LIST ALL PRODUCTS BY PRICE RANGE
+# ######################################################################
+# @app.route("/products/<string:product_range>/range", methods=["GET"])
+# def list_products_by_price_range(product_range):
+#     """Returns all of the Products by given price range"""
+#     app.logger.info("Request for Product list by given range")
+#     products = []
+#     low, high = product_range.split("_")
+#     products = Product.find_by_price_range(low, high)
+#     results = [product.serialize() for product in products]
+#     app.logger.info("Returning %d products", len(results))
+#     return jsonify(results), status.HTTP_200_OK
 
 ######################################################################
 # RETRIEVE A PRODUCT
@@ -155,9 +213,10 @@ def update_products(product_id):
     product = Product.find(product_id)
     if not product:
         abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
-
+    origin_like = product.like
     product.deserialize(request.get_json())
     product.id = product_id
+    product.like = origin_like
     product.update()
 
     app.logger.info("Product with ID [%s] updated.", product.id)

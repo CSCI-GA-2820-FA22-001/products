@@ -29,8 +29,8 @@ from compare import expect
 
 @given('the following products')
 def step_impl(context):
-    """ Delete all Pets and load new ones """
-    # List all of the pets and delete them one by one
+    """ Delete all products and load new ones """
+    # List all of the products and delete them one by one
     rest_endpoint = f"{context.BASE_URL}/products"
     context.resp = requests.get(rest_endpoint)
     expect(context.resp.status_code).to_equal(200)
@@ -38,7 +38,7 @@ def step_impl(context):
         context.resp = requests.delete(f"{rest_endpoint}/{product['id']}")
         expect(context.resp.status_code).to_equal(204)
 
-    # load the database with new pets
+    # load the database with new products
     for row in context.table:
         payload = {
             "name": row['name'],
