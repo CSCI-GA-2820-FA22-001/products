@@ -155,9 +155,10 @@ def update_products(product_id):
     product = Product.find(product_id)
     if not product:
         abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
-
+    origin_like = product.like
     product.deserialize(request.get_json())
     product.id = product_id
+    product.like = origin_like
     product.update()
 
     app.logger.info("Product with ID [%s] updated.", product.id)
