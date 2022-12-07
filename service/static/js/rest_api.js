@@ -6,13 +6,12 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#product_id").val(res.id);
-        $("#product_name").val(res.name);
-        $("#product_category").val(res.category);
-        $("#product_description").val(res.description);
-        $("#product_price").val(res.price);
-
-        $("#product_like").val(0);
+        $("#product_id_for_update").val(res.id);
+        $("#product_name_for_update").val(res.name);
+        $("#product_category_for_update").val(res.category);
+        $("#product_description_for_update").val(res.description);
+        $("#product_price_for_update").val(res.price);
+        
 
     }
     function update_form_data_for_create(res) {
@@ -108,29 +107,27 @@ $(function () {
 
     $("#update-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
-        let birthday = $("#pet_birthday").val();
-
+        let product_id = $("#product_id_for_update").val();
+        let name = $("#product_name_for_update").val();
+        let category = $("#product_category_for_update").val();
+        let description = $("#product_description_for_update").val();
+        let price = $("#product_price_for_update").val();
         let data = {
             "name": name,
             "category": category,
-            "available": available,
-            "gender": gender,
-            "birthday": birthday
+            "description": description,
+            "price": price,
         };
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
-            type: "PUT",
-            url: `/pets/${pet_id}`,
-            contentType: "application/json",
-            data: JSON.stringify(data)
-        })
+                type: "PUT",
+                url: `/products/${product_id}`,
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+
 
         ajax.done(function (res) {
             update_form_data(res)
@@ -149,13 +146,13 @@ $(function () {
 
     $("#retrieve-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let product_id = $("#product_id_for_update").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/pets/${pet_id}`,
+            url: `/products/${product_id}`,
             contentType: "application/json",
             data: ''
         })
