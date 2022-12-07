@@ -15,6 +15,7 @@ $(function () {
         $("#product_like").val(0);
         
     }
+    
     function update_form_data_for_create(res) {
         $("#product_id_created").val(res.id);
         
@@ -65,6 +66,32 @@ $(function () {
     // ****************************************
     // Create a Product
     // ****************************************
+
+    $("#list all-btn").click(function () {
+
+        let product_id = $("#product_id").val();
+
+        $("#flash_message").empty();
+
+        let ajax = $.ajax({
+            type: "GET",
+            url: `/products/${product_id}`,
+            contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function(res){
+            //alert(res.toSource())
+            update_form_data(res)
+            flash_message("Success")
+        });
+
+        ajax.fail(function(res){
+            clear_form_data()
+            flash_message(res.responseJSON.message)
+        });
+
+    });
 
     $("#create-btn").click(function () {
 
@@ -144,7 +171,7 @@ $(function () {
     });
 
     // ****************************************
-    // Retrieve a Pet
+    // Retrieve a Product
     // ****************************************
 
     $("#retrieve-btn").click(function () {

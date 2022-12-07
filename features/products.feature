@@ -15,6 +15,8 @@ Scenario: The server is running
     Then I should see "Product Demo RESTful Service" in the title
     And I should not see "404 Not Found"
 
+
+
 Scenario: Create a Product
     When I visit the "home page"
     And I set the "Name for create" to "iphone"
@@ -46,16 +48,16 @@ Scenario: Like a Product
     And I should not see "2" in the results
 
 
-    
+Scenario: List all products
+    When I visit the "home page"
+    And I press the "List All" button
+    Then I should see the message "Success"
+    And I should see "iphone" in the results
+    And I should see "ipad" in the results
+    And I should see "AK-47" in the results
+    And I should not see "pig" in the results
     
 
-# Scenario: List all pets
-#     When I visit the "home page"
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should see "kitty" in the results
-#     And I should not see "leo" in the results
 
 # Scenario: Search for dogs
 #     When I visit the "home page"
