@@ -15,6 +15,7 @@ class ProductFactory(factory.Factory):
 
     id = factory.Sequence(lambda n: n)
     name = FuzzyChoice(choices=["iPhone", "iPad", "Macbook"])
+    category = FuzzyChoice(choices=["Electronic", "Gun", "Toy"])
     description = factory.Faker("word")
     price = FuzzyChoice(choices=[50, 100, 200])
     like = FuzzyChoice(choices=[0,10,250])

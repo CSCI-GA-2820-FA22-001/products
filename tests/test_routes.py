@@ -18,6 +18,7 @@ from service import app
 from service.models import db, init_db, Product
 from service.common import status  # HTTP Status Codes
 from tests.factories import ProductFactory
+from urllib.parse import quote_plus
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
@@ -234,6 +235,50 @@ class TestProductServer(TestCase):
         response = self.client.post(BASE_URL)
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
+
+# ----------------------------------------------------------
+# TEST QUERY
+# ----------------------------------------------------------
+    def test_get_products_by_name(self):
+        """It should Get Products with the same name"""
+        # get the name of a product
+        test_products = self._create_products(10)
+        test_product = test_products[0]
+        name_count = len([product for product in test_products if product.name == test_product.name])
+        response = self.client.get(BASE_URL, query_string=f"name={quote_plus(test_product.name)}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        datas = response.get_json()
+        self.assertEqual(len(datas), name_count)
+        for data in datas:
+            self.assertEqual(data["name"], test_product.name)
+
+    def test_get_products_by_category(self):
+        """It should Get Products with the same category"""
+        # get the category of a product
+        test_products = self._create_products(10)
+        test_product = test_products[0]
+        cat_count = len([product for product in test_products if product.category == test_product.category])
+        response = self.client.get(BASE_URL, query_string=f"category={quote_plus(test_product.category)}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        datas = response.get_json()
+        self.assertEqual(len(datas), cat_count)
+        for data in datas:
+            self.assertEqual(data["category"], test_product.category)
+
+    def test_get_products_by_price_range(self):
+        """It should Get Products with the price range"""
+        # get the proce range of a product
+        test_products = self._create_products(10)
+        test_product = test_products[0]
+        low_range, up_range = "50", "150"
+        query = low_range + "_" + up_range
+        count = len([product for product in test_products if product.price >= int(low_range) and product.price <= int(up_range)])
+        response = self.client.get(BASE_URL, query_string=f"price_range={quote_plus(query)}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        datas = response.get_json()
+        self.assertEqual(len(datas), count)
+        for data in datas:
+            self.assertTrue(data["price"] >= int(low_range) and data["price"] <= int(up_range))
    
 # ----------------------------------------------------------
 # TEST ACTION
