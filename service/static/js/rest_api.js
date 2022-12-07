@@ -175,7 +175,7 @@ $(function () {
 
     $("#delete-btn").click(function () {
 
-        let product_id = $("#product_id").val();
+        let product_id = $("#product_id_for_delete").val();
 
         $("#flash_message").empty();
 
