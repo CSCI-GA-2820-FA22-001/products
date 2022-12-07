@@ -114,11 +114,11 @@ Scenario: Update a Product
     When I copy the "Id created" field
     And I paste the "Id for update" field
     And I press the "Retrieve" button
-    Then I should see the message "Success"
+    Then I should see the message "SUCCESS"
     And I should see "iphone" in the "Name for Update" field
     When I change "Name for Update" to "ipad"
     And I press the "Update" button
-    Then I should see the message "Success"
+    Then I should see the message "SUCCESS"
     When I press the "Retrieve" button
-    Then I should see the message "Success"
+    Then I should see the message "SUCCESS"
     And I should see "ipad" in the "Name for Update" field
