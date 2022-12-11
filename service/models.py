@@ -10,6 +10,8 @@ from sqlalchemy import CheckConstraint
 
 logger = logging.getLogger("flask.app")
 
+# this is for test cicd pipline
+
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
