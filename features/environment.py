@@ -5,7 +5,7 @@ from os import getenv
 from selenium import webdriver
 
 WAIT_SECONDS = int(getenv('WAIT_SECONDS', '60'))
-BASE_URL = getenv('BASE_URL', 'http://169.51.206.181:31001')
+BASE_URL = getenv('BASE_URL', 'http://localhost:8080')
 
 
 def before_all(context):
