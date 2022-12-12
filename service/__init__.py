@@ -6,7 +6,7 @@ and SQL database
 """
 import os
 import logging
-import flask_restx import Api
+from flask_restx import Api
 import sys
 from flask import Flask
 from service import config

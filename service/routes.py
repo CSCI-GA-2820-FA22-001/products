@@ -90,6 +90,15 @@ def token_required(f):
             return {'message': 'Invalid or missing token'}, 401
     return decorated
 
+
+######################################################################
+# Function to generate a random API key (good for testing)
+######################################################################
+def generate_apikey():
+    """ Helper function used when testing API keys """
+    return secrets.token_hex(16)
+
+
 ######################################################################
 #  PATH: /products/{id}
 ######################################################################
@@ -111,8 +120,8 @@ class ProductResource(Resource):
     @api.doc('get_products')
     @api.response(404, 'Product not found')
     @api.marshal_with(product_model)
-    @app.route("/products/<int:product_id>", methods=["GET"])
-    def get_products(product_id):
+    # @app.route("/products/<int:product_id>", methods=["GET"])
+    def get_products(self, product_id):
         """
         Retrieve a single Product
         This endpoint will return a Product based on it's id
@@ -133,8 +142,8 @@ class ProductResource(Resource):
     @api.doc('delete_pets', security='apikey')
     @api.response(204, 'Pet deleted')
     @token_required
-    @app.route("/products/<int:product_id>", methods=["DELETE"])
-    def delete_products(product_id):
+    # @app.route("/products/<int:product_id>", methods=["DELETE"])
+    def delete_products(self, product_id):
         """
         Delete a Product
 
@@ -160,7 +169,7 @@ class ProductResource(Resource):
     @api.marshal_with(product_model)
     @token_required
     @app.route("/products/<int:product_id>", methods=["PUT"])
-    def update_products(product_id):
+    def update_products(self, product_id):
         """
         Update a Product
 
@@ -196,7 +205,7 @@ class ProductCollection(Resource):
     @api.expect(product_args, validate=True)
     @api.marshal_list_with(product_model)
     @app.route("/products", methods=["GET"])
-    def list_products():
+    def list_products(self):
         """Returns all of the Products"""
         app.logger.info("Request for Product list")
         products = []
@@ -233,7 +242,7 @@ class ProductCollection(Resource):
     @api.marshal_with(product_model, code=201)
     @token_required
     @app.route("/products", methods=["POST"])
-    def create_products():
+    def create_products(self):
         """
         Creates a Products
         This endpoint will create a Products based the data in the body that is posted
@@ -263,7 +272,7 @@ class LikeResource(Resource):
     @api.response(404, 'Product not found')
     @api.response(409, 'The Product is not available for purchase')
     @app.route("/products/<int:product_id>/like", methods=["PUT"])
-    def like_products(product_id):
+    def like_products(self, product_id):
         """Like a Product makes it Likes Count Increment 1"""
         product = Product.find(product_id)
         if not product:
