@@ -12,7 +12,7 @@ logger = logging.getLogger("flask.app")
 
 # add test for cicd pipline
 # test 3
-# test 7
+# test new cluster
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
