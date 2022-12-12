@@ -8,16 +8,22 @@ PUT /products/{id} - updates a Product record in the database
 DELETE /products/{id} - deletes a Product record in the database
 """
 
-import sys
-import secrets
-import logging
+# import sys
+# import secrets
+# import logging
 from functools import wraps
-from flask_restx import Api, Resource, fields, reqparse, inputs
-from flask import jsonify, request, url_for, abort,make_response
+# from flask_restx import Api, Resource, fields, reqparse, inputs
+# from flask import jsonify, request, url_for, abort,make_response
+# from service.models import Product
+# from service.common import status  # HTTP Status Codes
+# from . import app, api # Import Flask application
+
+from flask import jsonify, request, url_for, make_response, abort
 from service.models import Product
 from service.common import status  # HTTP Status Codes
-from . import app, api # Import Flask application
-
+from flask_restx import Api, Resource, fields, reqparse, inputs
+from . import app  # Import Flask application
+from werkzeug.exceptions import NotFound
 
 ######################################################################
 # GET HEALTH CHECK
@@ -46,15 +52,15 @@ def index():
     return app.send_static_file("index.html")
 
 
-# api = Api(app,
-#           version='1.0.0',
-#           title='Product REST API Service',
-#           description='This is a Product server.',
-#           default='products',
-#           default_label='Product shop operations',
-#           doc='/apidocs', # default also could use doc='/apidocs/'
-#           prefix='' # changed from /api to /
-#          )
+api = Api(app,
+          version='1.0.0',
+          title='Product REST API Service',
+          description='This is a Product server.',
+          default='products',
+          default_label='Product shop operations',
+          doc='/apidocs', # default also could use doc='/apidocs/'
+          prefix='/' # changed from /api to /
+         )
 
 # Define the model so that the docs reflect what can be sent
 create_model = api.model('Product', {
@@ -108,6 +114,77 @@ def token_required(f):
 def generate_apikey():
     """ Helper function used when testing API keys """
     return secrets.token_hex(16)
+
+
+
+
+######################################################################
+#  PATH: /products
+######################################################################
+@api.route('/products', strict_slashes=False)
+class ProductCollection(Resource):
+
+
+    ######################################################################
+    # LIST ALL PRODUCTS
+    ######################################################################
+    
+    @api.doc('list_products')
+    @api.expect(product_args, validate=True)
+    @api.marshal_list_with(product_model)
+    def get(self):
+        """Returns all of the Products"""
+        app.logger.info("Request for Product list")
+        products = []
+
+        category = request.args.get("category")
+        name = request.args.get("name")
+        price_range = request.args.get("price_range")
+
+        if category:
+            app.logger.info("Find by category: %s", category)
+            products = Product.find_by_category(category)
+        elif name:
+            app.logger.info("Find by name: %s", name)
+            products = Product.find_by_name(name)
+        elif price_range:
+            app.logger.info("Find by price range: %s", price_range)
+            low, high = price_range.split("_")
+            products = Product.find_by_price_range(int(low), int(high))
+        else:
+            app.logger.info("Find all")
+            products = Product.all()
+
+        results = [product.serialize() for product in products]
+        app.logger.info("[%s] Products returned", len(results))
+        return jsonify(results), status.HTTP_200_OK
+
+    ######################################################################
+    # ADD A NEW PRODUCT
+    ######################################################################
+    
+    @api.doc('create_products', security='apikey')
+    @api.response(400, 'The posted data was not valid')
+    @api.expect(create_model)
+    @api.marshal_with(product_model, code=201)
+    # @app.route("/products", methods=["POST"])
+    # @token_required
+    def post(self):
+        """
+        Creates a Products
+        This endpoint will create a Products based the data in the body that is posted
+        """
+        app.logger.info("Request to create a product")
+        check_content_type("application/json")
+        product = Product()
+        product.deserialize(request.get_json())
+        product.create()
+        message = product.serialize()
+        location_url = api.url_for(ProductResource, product_id =product.id, _external=True)
+
+        app.logger.info("Product with ID [%s] created.", product.id)
+        return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+
 
 
 ######################################################################
@@ -200,71 +277,6 @@ class ProductResource(Resource):
         app.logger.info("Product with ID [%s] updated.", product.id)
         return jsonify(product.serialize()), status.HTTP_200_OK
 
-######################################################################
-#  PATH: /products
-######################################################################
-@api.route('/products', strict_slashes=False)
-class ProductCollection(Resource):
-
-
-    ######################################################################
-    # LIST ALL PRODUCTS
-    ######################################################################
-    
-    @api.doc('list_products')
-    @api.expect(product_args, validate=True)
-    @api.marshal_list_with(product_model)
-    def get(self):
-        """Returns all of the Products"""
-        app.logger.info("Request for Product list")
-        products = []
-
-        category = request.args.get("category")
-        name = request.args.get("name")
-        price_range = request.args.get("price_range")
-
-        if category:
-            app.logger.info("Find by category: %s", category)
-            products = Product.find_by_category(category)
-        elif name:
-            app.logger.info("Find by name: %s", name)
-            products = Product.find_by_name(name)
-        elif price_range:
-            app.logger.info("Find by price range: %s", price_range)
-            low, high = price_range.split("_")
-            products = Product.find_by_price_range(int(low), int(high))
-        else:
-            app.logger.info("Find all")
-            products = Product.all()
-
-        results = [product.serialize() for product in products]
-        app.logger.info("[%s] Products returned", len(results))
-        return jsonify(results), status.HTTP_200_OK
-
-    ######################################################################
-    # ADD A NEW PRODUCT
-    ######################################################################
-    
-    @api.doc('create_products', security='apikey')
-    @api.response(400, 'The posted data was not valid')
-    @api.expect(create_model)
-    @api.marshal_with(product_model, code=201)
-    @token_required
-    def post(self):
-        """
-        Creates a Products
-        This endpoint will create a Products based the data in the body that is posted
-        """
-        app.logger.info("Request to create a product")
-        check_content_type("application/json")
-        product = Product()
-        product.deserialize(request.get_json())
-        product.create()
-        message = product.serialize()
-        location_url = url_for("get_products", product_id =product.id, _external=True)
-
-        app.logger.info("Product with ID [%s] created.", product.id)
-        return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 ######################################################################
 #  PATH: /products/{id}/like
