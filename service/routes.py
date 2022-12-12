@@ -45,6 +45,17 @@ def index():
 #     )
     return app.send_static_file("index.html")
 
+
+# api = Api(app,
+#           version='1.0.0',
+#           title='Product REST API Service',
+#           description='This is a Product server.',
+#           default='products',
+#           default_label='Product shop operations',
+#           doc='/apidocs', # default also could use doc='/apidocs/'
+#           prefix='' # changed from /api to /
+#          )
+
 # Define the model so that the docs reflect what can be sent
 create_model = api.model('Product', {
     'name': fields.String(required=True,
@@ -60,7 +71,7 @@ create_model = api.model('Product', {
 })
 
 product_model = api.inherit(
-    'ProductModel', 
+    'ProductModel',
     create_model,
     {
         '_id': fields.String(readOnly=True,
@@ -121,7 +132,7 @@ class ProductResource(Resource):
     @api.response(404, 'Product not found')
     @api.marshal_with(product_model)
     # @app.route("/products/<int:product_id>", methods=["GET"])
-    def get_products(self, product_id):
+    def get(self, product_id):
         """
         Retrieve a single Product
         This endpoint will return a Product based on it's id
@@ -143,7 +154,7 @@ class ProductResource(Resource):
     @api.response(204, 'Pet deleted')
     @token_required
     # @app.route("/products/<int:product_id>", methods=["DELETE"])
-    def delete_products(self, product_id):
+    def delete(self, product_id):
         """
         Delete a Product
 
@@ -168,8 +179,7 @@ class ProductResource(Resource):
     @api.expect(product_model)
     @api.marshal_with(product_model)
     @token_required
-    @app.route("/products/<int:product_id>", methods=["PUT"])
-    def update_products(self, product_id):
+    def put(self, product_id):
         """
         Update a Product
 
@@ -204,8 +214,7 @@ class ProductCollection(Resource):
     @api.doc('list_products')
     @api.expect(product_args, validate=True)
     @api.marshal_list_with(product_model)
-    @app.route("/products", methods=["GET"])
-    def list_products(self):
+    def get(self):
         """Returns all of the Products"""
         app.logger.info("Request for Product list")
         products = []
@@ -241,8 +250,7 @@ class ProductCollection(Resource):
     @api.expect(create_model)
     @api.marshal_with(product_model, code=201)
     @token_required
-    @app.route("/products", methods=["POST"])
-    def create_products(self):
+    def post(self):
         """
         Creates a Products
         This endpoint will create a Products based the data in the body that is posted
