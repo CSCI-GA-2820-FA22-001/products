@@ -63,7 +63,8 @@ api = Api(app,
          )
 
 # Define the model so that the docs reflect what can be sent
-create_model = api.model('Product', {
+create_model = api.model('Product', 
+{
     'name': fields.String(required=True,
                           description='The name of the Product'),
     'category': fields.String(required=True,
@@ -80,7 +81,7 @@ product_model = api.inherit(
     'ProductModel',
     create_model,
     {
-        '_id': fields.String(readOnly=True,
+        'id': fields.Integer(readOnly=True,
                             description='The unique id assigned internally by service'),
     }
 )
@@ -157,7 +158,7 @@ class ProductCollection(Resource):
 
         results = [product.serialize() for product in products]
         app.logger.info("[%s] Products returned", len(results))
-        return jsonify(results), status.HTTP_200_OK
+        return results, status.HTTP_200_OK
 
     ######################################################################
     # ADD A NEW PRODUCT
@@ -181,9 +182,8 @@ class ProductCollection(Resource):
         product.create()
         message = product.serialize()
         location_url = api.url_for(ProductResource, product_id =product.id, _external=True)
-
         app.logger.info("Product with ID [%s] created.", product.id)
-        return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+        return message, status.HTTP_201_CREATED, {"Location": location_url}
 
 
 
@@ -214,14 +214,12 @@ class ProductResource(Resource):
         Retrieve a single Product
         This endpoint will return a Product based on it's id
         """
-
         app.logger.info("Request for product with id: %s", product_id)
         product = Product.find(product_id)
         if not product:
             abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
-
         app.logger.info("Returning product: %s", product.name)
-        return jsonify(product.serialize()), status.HTTP_200_OK
+        return product.serialize(), status.HTTP_200_OK
 
 
     ######################################################################
@@ -229,7 +227,7 @@ class ProductResource(Resource):
     ######################################################################
     @api.doc('delete_pets', security='apikey')
     @api.response(204, 'Pet deleted')
-    @token_required
+    # @token_required
     # @app.route("/products/<int:product_id>", methods=["DELETE"])
     def delete(self, product_id):
         """
@@ -255,7 +253,7 @@ class ProductResource(Resource):
     @api.response(400, 'The posted Product data was not valid')
     @api.expect(product_model)
     @api.marshal_with(product_model)
-    @token_required
+    # @token_required
     def put(self, product_id):
         """
         Update a Product
@@ -275,7 +273,7 @@ class ProductResource(Resource):
         product.update()
 
         app.logger.info("Product with ID [%s] updated.", product.id)
-        return jsonify(product.serialize()), status.HTTP_200_OK
+        return product.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
@@ -289,10 +287,10 @@ class LikeResource(Resource):
     # LIKE A PRODUCT
     ######################################################################
     @api.doc('like_products')
-    @api.response(404, 'Product not found')
-    @api.response(409, 'The Product is not available for purchase')
-    @app.route("/products/<int:product_id>/like", methods=["PUT"])
-    def like_products(self, product_id):
+    # @api.response(404, 'Product not found')
+    # @api.response(409, 'The Product is not available for purchase')
+    # @app.route("/products/<int:product_id>/like", methods=["PUT"])
+    def put(self, product_id):
         """Like a Product makes it Likes Count Increment 1"""
         product = Product.find(product_id)
         if not product:
@@ -301,7 +299,7 @@ class LikeResource(Resource):
         app.logger.info("Request to like product with like count: %s", product.like)
         product.like += 1
         product.update()
-        return jsonify(product.serialize()), status.HTTP_200_OK
+        return product.serialize(), status.HTTP_200_OK
     
 # ######################################################################
 # # LIST ALL PRODUCTS
