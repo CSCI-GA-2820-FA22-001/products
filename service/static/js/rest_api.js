@@ -3,7 +3,7 @@ $(function () {
     // ****************************************
     //  U T I L I T Y   F U N C T I O N S
     // ****************************************
-      
+
     // Updates the form with data from the response
     function update_form_data(res) {
         $("#product_id_for_update").val(res.id);
@@ -12,7 +12,7 @@ $(function () {
         $("#product_description_for_update").val(res.description);
         $("#product_price_for_update").val(res.price);
     }
-    
+
     function update_form_data_for_create(res) {
         $("#product_id_created").val(res.id);
     }
@@ -60,7 +60,7 @@ $(function () {
     }
 
 
-    
+
     $("#create-btn").click(function () {
 
         let name = $("#product_name_for_create").val();
@@ -121,11 +121,11 @@ $(function () {
         $("#flash_message").empty();
 
         let ajax = $.ajax({
-                type: "PUT",
-                url: `/products/${product_id}`,
-                contentType: "application/json",
-                data: JSON.stringify(data)
-            })
+            type: "PUT",
+            url: `/products/${product_id}`,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        })
 
 
         ajax.done(function (res) {
@@ -441,6 +441,50 @@ $(function () {
         });
 
     });
+
+    // ****************************************
+    // List a Product by ID
+    // ****************************************
+
+    $("#list_by_id-btn").click(function () {
+
+        let product_id = $("#product_id_for_list").val();
+
+        $("#flash_message").empty();
+
+        let ajax = $.ajax({
+            type: "GET",
+            url: `/products/${product_id}`,
+            contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function (res) {
+            //alert(res.toSource())
+            $("#search_results").empty();
+            let table = '<table class="table table-striped" cellpadding="10">'
+            table += '<thead><tr>'
+            table += '<th class="col-md-2">ID</th>'
+            table += '<th class="col-md-2">Name</th>'
+            table += '<th class="col-md-2">Category</th>'
+            table += '<th class="col-md-2">Description</th>'
+            table += '<th class="col-md-2">Price</th>'
+            table += '<th class="col-md-2">Like</th>'
+            table += '</tr></thead><tbody>'
+            for (let i = 0; i < 1; i++) {
+                table += `<tr id="row_${i}"><td>${res.id}</td><td>${res.name}</td><td>${res.category}</td><td>${res.description}</td><td>${res.price}</td><td>${res.like}</td></tr>`;
+            }
+            table += '</tbody></table>';
+            $("#search_results").append(table);
+            flash_message("SUCCESS")
+        });
+
+        ajax.fail(function (res) {
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
 
 
 })
