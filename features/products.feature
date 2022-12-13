@@ -85,7 +85,7 @@ Feature: The product store service back-end
         And I should see "ipad" in the results
         And I should see "AK-47" in the results
         And I should not see "toy" in the results
-    
+
 
     Scenario: Update a Product
         When I visit the "Home Page"
@@ -106,7 +106,7 @@ Feature: The product store service back-end
         When I press the "Retrieve" button
         Then I should see the message "SUCCESS"
         And I should see "ipad" in the "Name for Update" field
-    
+
     Scenario: Delete a Product
         When I visit the "home page"
         And I set the "Name for create" to "coffee"
@@ -132,3 +132,22 @@ Feature: The product store service back-end
         Then I should see the message "SUCCESS"
         And I should not see "coffee" in the results
 
+    Scenario: List products by id
+        When I visit the "home page"
+        And I set the "Name for create" to "Switch"
+        And I set the "Category for create" to "Gamming"
+        And I set the "Description for create" to "This is Switch"
+        And I set the "Price for create" to "3999"
+        And I press the "Create" button
+        Then I should see the message "SUCCESS"
+        When I copy the "Id Created" field
+        And I press the "Clear" button
+        Then the "Id Created" field should be empty
+        And the "Name for create" field should be empty
+        And the "Category for create" field should be empty
+        And the "Description for create" field should be empty
+        And the "Price for create" field should be empty
+        When I paste the "ID for List" field
+        And I press the "List By ID" button
+        Then I should see the message "SUCCESS"
+        And I should see "Switch" in the results
