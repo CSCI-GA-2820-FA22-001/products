@@ -3,7 +3,7 @@ $(function () {
     // ****************************************
     //  U T I L I T Y   F U N C T I O N S
     // ****************************************
-
+      
     // Updates the form with data from the response
     function update_form_data(res) {
         $("#product_id_for_update").val(res.id);
@@ -11,13 +11,10 @@ $(function () {
         $("#product_category_for_update").val(res.category);
         $("#product_description_for_update").val(res.description);
         $("#product_price_for_update").val(res.price);
-        
-
     }
     
     function update_form_data_for_create(res) {
         $("#product_id_created").val(res.id);
-
     }
 
     /// Clears all form fields
@@ -71,8 +68,10 @@ $(function () {
         let description = $("#product_description_for_create").val();
         let price = $("#product_price_for_create").val();
         let like = $("#product_like_for_create").val();
+        let id = $("#product_id_created").val();
 
         let data = {
+            "id": id,
             "name": name,
             "category": category,
             "description": description,
@@ -90,6 +89,7 @@ $(function () {
         });
 
         ajax.done(function (res) {
+            console.log(res)
             update_form_data_for_create(res)
             flash_message("SUCCESS")
         });
