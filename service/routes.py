@@ -9,7 +9,7 @@ DELETE /products/{id} - deletes a Product record in the database
 """
 
 # import sys
-# import secrets
+import secrets
 # import logging
 from functools import wraps
 # from flask_restx import Api, Resource, fields, reqparse, inputs
